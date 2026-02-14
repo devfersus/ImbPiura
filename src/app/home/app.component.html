@@ -1,0 +1,111 @@
+<div class="main-container">
+  <header class="nav-yellow">
+    <div class="logo-top">LO<br>TENGO!</div>
+    <nav>
+      <a href="#">INICIO</a>
+      <a href="#">PROPIEDADES</a>
+      <a href="#">CONTACTO</a>
+    </nav>
+  </header>
+  <div class="black-bar"></div>
+
+  <section class="hero">
+    <div class="hero-img-container">
+      <img src="llaves.jpg" alt="Venta" class="hero-bg">
+    </div>
+  <div class="black-bar"></div>
+
+    <div class="search-section">
+      <div class="floating-badge">
+        <img src="logo.png" alt="Lo Tengo Inmobiliaria">
+      </div>
+
+      <h1 class="main-title">LO QUE BUSCAS, LO TENEMOS</h1>
+
+      <div class="dark-search-bar">
+        <select>
+          <option>Tipo de Propiedad</option>
+        </select>
+        <select>
+          <option>Tipo de Listado</option>
+        </select>
+        <div class="input-with-icon">
+          <input type="text" placeholder="En donde">
+          <span class="loc-icon">📍</span>
+          <span class="search-icon">🔍</span>
+        </div>
+      </div>
+
+      <p class="hero-footer-text">
+        CASAS, DEPARTAMENTOS, TERRENOS, LOS TENEMOS TODOS.<br>
+        <strong>MÁS DE 8 AÑOS</strong> HACIENDO REALIDAD LA BÚSQUEDA DE CADA<br>
+        UNO DE NUESTROS CLIENTES EN TODO PIURA Y EN EL NORTE DEL PAÍS.
+      </p>
+    </div>
+  </section>
+
+  <div class="contact-strip">
+    <p>SI NO LO ENCONTRASTE EN NUESTRO BUSCADOR, CUÉNTANOS QUÉ NECESITAS:</p>
+    <h2 class="contact-number">943 449 197 /// lotengoinm@gmail.com</h2>
+  </div>
+
+  <section class="properties-container">
+    <div class="prop-grid">
+      <div class="prop-card" *ngFor="let prop of propiedades">
+        <div class="card-tag">{{prop.tag}}</div>
+        <div class="card-content">
+          <div class="white-frame">
+            <img [src]="prop.img" [alt]="prop.titulo">
+          </div>
+          <div class="prop-info">
+            <h3>{{prop.titulo}}</h3>
+            <span class="sub">{{prop.subtitulo}}</span>
+            <p class="price">{{prop.precio}}</p>
+            <button class="btn-ver-mas">VER MÁS</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- NUEVA SECCIÓN: "Sabemos lo que buscas" -->
+  <section class="cta-wrapper">
+  <div class="black-bar"></div>
+
+    <div class="cta-section">
+      <img src="fondo.jpg" alt="Cliente satisfecho" class="cta-bg-image">
+
+      <div class="cta-overlay">
+        <div class="cta-content">
+          <div class="cta-logo">
+            <img src="logo.png" alt="Lo Tengo Inmobiliaria">
+          </div>
+          <div class="cta-text">
+            <h2>
+              SABEMOS LO<br>
+              QUE BUSCAS<br>
+              PORQUE<br>
+              <span class="highlight">PENSAMOS<br>COMO TÚ</span>
+            </h2>
+            <button class="btn-cta">QUIERO BUSCAR AHORA</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  <div class="black-bar"></div>
+  </section>
+
+  <footer class="main-footer">
+    <div class="footer-row">
+      <div class="logo-footer">LO<br>TENGO!
+        <p class="copy">© Todos los derechos reservados Lo Tengo! Inmobiliaria 2021</p>
+      </div>
+      <div class="footer-contacts">
+        <div class="social-icons">f in wa</div>
+        <p>943 449 197</p>
+        <p>lotengoinm@gmail.com</p>
+      </div>
+    </div>
+  </footer>
+</div>
