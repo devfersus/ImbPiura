@@ -11,13 +11,13 @@
 
   <section class="hero">
     <div class="hero-img-container">
-      <img src="llaves.jpg" alt="Venta" class="hero-bg">
+      <img src="logos/llaves.jpg" alt="Venta" class="hero-bg">
     </div>
-  <div class="black-bar"></div>
+    <div class="black-bar"></div>
 
     <div class="search-section">
       <div class="floating-badge">
-        <img src="logo.png" alt="Lo Tengo Inmobiliaria">
+        <img src="logos/logo.png" alt="Lo Tengo Inmobiliaria">
       </div>
 
       <h1 class="main-title">LO QUE BUSCAS, LO TENEMOS</h1>
@@ -25,9 +25,14 @@
       <div class="dark-search-bar">
         <select>
           <option>Tipo de Propiedad</option>
+          <option>Casa</option>
+          <option>Departamento</option>
+          <option>Terreno</option>
         </select>
         <select>
           <option>Tipo de Listado</option>
+          <option>Venta</option>
+          <option>Alquiler</option>
         </select>
         <div class="input-with-icon">
           <input type="text" placeholder="En donde">
@@ -49,36 +54,64 @@
     <h2 class="contact-number">943 449 197 /// lotengoinm@gmail.com</h2>
   </div>
 
-  <section class="properties-container">
-    <div class="prop-grid">
-      <div class="prop-card" *ngFor="let prop of propiedades">
-        <div class="card-tag">{{prop.tag}}</div>
-        <div class="card-content">
-          <div class="white-frame">
-            <img [src]="prop.img" [alt]="prop.titulo">
+<section class="properties-container">
+  <div class="prop-grid">
+    <div class="prop-card" *ngFor="let prop of propiedades">
+      <div class="card-tag">{{prop.tag}}</div>
+      <div class="card-content">
+        <div class="white-frame">
+          <img [src]="prop.img" [alt]="prop.titulo" class="prop-image">
+          <div class="prop-overlay">
+            <img src="logos/logo.png" alt="Lo Tengo" class="prop-logo">
+            <p class="prop-phone">943449197</p>
           </div>
-          <div class="prop-info">
-            <h3>{{prop.titulo}}</h3>
-            <span class="sub">{{prop.subtitulo}}</span>
-            <p class="price">{{prop.precio}}</p>
-            <button class="btn-ver-mas">VER MÁS</button>
-          </div>
+        </div>
+        <div class="prop-info">
+          <h3>{{prop.titulo}}</h3>
+          <span class="sub">{{prop.subtitulo}}</span>
+          <p class="price">{{prop.precio}}</p>
+          <button class="btn-ver-mas">VER MÁS</button>
         </div>
       </div>
     </div>
+  </div>
+</section>
+
+  <!-- Sección de Testimonios -->
+  <section class="testimonials-section">
+    <div class="testimonial-container">
+      <button class="testimonial-arrow left-arrow">‹</button>
+
+      <div class="testimonial-item">
+        <img src="persona/persona2.jpg" alt="Carmen" class="testimonial-photo">
+        <div class="testimonial-content">
+          <p class="testimonial-quote">"Hicieron muy sencillo todo el proceso"</p>
+          <p class="testimonial-author">Carlo, 42 años</p>
+        </div>
+      </div>
+
+      <div class="testimonial-item">
+        <img src="persona/persona1.jpg" alt="Raúl" class="testimonial-photo">
+        <div class="testimonial-content">
+          <p class="testimonial-quote">"Encontré exactamente lo que buscaba"</p>
+          <p class="testimonial-author">Raúl, 38 años</p>
+        </div>
+      </div>
+
+      <button class="testimonial-arrow right-arrow">›</button>
+    </div>
   </section>
+  <div class="black-bar"></div>
 
   <!-- NUEVA SECCIÓN: "Sabemos lo que buscas" -->
   <section class="cta-wrapper">
-  <div class="black-bar"></div>
-
     <div class="cta-section">
-      <img src="fondo.jpg" alt="Cliente satisfecho" class="cta-bg-image">
+      <img src="logos/portada.jpg" alt="Cliente satisfecho" class="cta-bg-image">
 
       <div class="cta-overlay">
         <div class="cta-content">
           <div class="cta-logo">
-            <img src="logo.png" alt="Lo Tengo Inmobiliaria">
+            <img src="logos/logo.png" alt="Lo Tengo Inmobiliaria">
           </div>
           <div class="cta-text">
             <h2>
@@ -92,20 +125,30 @@
         </div>
       </div>
     </div>
-
-  <div class="black-bar"></div>
+    <div class="black-bar"></div>
   </section>
 
-  <footer class="main-footer">
-    <div class="footer-row">
-      <div class="logo-footer">LO<br>TENGO!
-        <p class="copy">© Todos los derechos reservados Lo Tengo! Inmobiliaria 2021</p>
-      </div>
-      <div class="footer-contacts">
-        <div class="social-icons">f in wa</div>
-        <p>943 449 197</p>
-        <p>lotengoinm@gmail.com</p>
-      </div>
+<footer class="main-footer">
+  <div class="footer-content">
+    <div class="footer-left">
+      <div class="logo-footer">LO<br>TENGO!</div>
+      <p class="copy">© Todos los derechos reservados Lo Tengo! Inmobiliaria 2021</p>
     </div>
-  </footer>
+
+<div class="footer-right">
+  <div class="social-icons">
+    <a href="#" target="_blank">
+      <img src="iconos/facebook.png" alt="Facebook">
+    </a>
+    <a href="#" target="_blank">
+      <img src="iconos/instagram.png" alt="LinkedIn">
+    </a>
+
+  </div>
+  <div class="contact-info">
+    <p class="phone" style="padding-top: 1rem;">943 449 197</p>
+    <p class="email" style="padding-bottom: 0.15rem;">lotengoinm@gmail.com</p>
+  </div>
 </div>
+  </div>
+</footer>

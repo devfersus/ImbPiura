@@ -16,27 +16,37 @@ export class AppComponent implements OnInit {
       titulo: 'CASA EN LOS EJIDOS',
       subtitulo: 'ESTRENO',
       precio: 'US$ 400,000',
-      img: 'casa1.jpg'
+      img: 'departamentos/depa1.jpg'  // ❌ SIN la barra inicial
     },
     {
       tag: 'OPORTUNIDAD ÚNICA',
       titulo: 'CASA EN MIRAFLORES COUNTRY CLUB',
       subtitulo: 'ESTRENO',
       precio: 'US$ 400,000',
-      img: 'assets/casa1.jpg'
+      img: 'departamentos/depa1.jpg'  // ❌ SIN la barra inicial
     },
     {
       tag: 'INVIERTE EN UN TERRENO',
       titulo: 'TERRENO EN EL CIRUELO',
       subtitulo: 'INVERSIÓN',
       precio: 'US$ 170 M²',
-      img: 'assets/casa3.jpg'
+      img: 'departamentos/depa1.jpg'  // ❌ SIN la barra inicial
     }
   ];
 
   testimonios = [
-    { nombre: 'Carmen', edad: 42, comentario: 'Hicieron muy sencillo todo el proceso', foto: 'casa1.jpg' },
-    { nombre: 'Raúl', edad: 38, comentario: 'Encontré exactamente lo que buscaba', foto: 'casa1.jpg' }
+    { 
+      nombre: 'Carmen', 
+      edad: 42, 
+      comentario: 'Hicieron muy sencillo todo el proceso',
+      foto: 'departamentos/depa1.jpg'  // ❌ SIN la barra inicial
+    },
+    { 
+      nombre: 'Raúl', 
+      edad: 38, 
+      comentario: 'Encontré exactamente lo que buscaba', 
+      foto: 'persona/persona1.jpg'  // ❌ SIN la barra inicial
+    }
   ];
 
   ngOnInit() {}
