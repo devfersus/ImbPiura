@@ -16,6 +16,11 @@
   overflow-x: hidden;
 }
 
+/* Optimización de renderizado de imágenes */
+img {
+  content-visibility: auto;
+}
+
 /* Header */
 .nav-yellow { 
   background: var(--yellow); 
@@ -85,10 +90,11 @@ nav a:hover {
   height: 500px; 
   object-fit: cover; 
   display: block;
+  will-change: transform;
 }
 
 .search-section { 
-  padding: 80px 20px 50px; 
+  padding: 100px 20px 50px; 
   width: 100%;
   position: relative;
   background: white;
@@ -96,16 +102,14 @@ nav a:hover {
 
 .floating-badge { 
   position: absolute; 
-  top: -80px; 
+  top: -100px; 
   left: 50%; 
   transform: translateX(-50%); 
-  width: 160px;
-  height: 160px;
+  width: 250px;
+  height: 200px;
   z-index: 10; 
-  background: white;
   border-radius: 10px;
-  padding: 15px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  padding: 20px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -293,6 +297,8 @@ nav a:hover {
   height: 180px; 
   object-fit: cover; 
   display: block;
+  image-rendering: -webkit-optimize-contrast;
+  image-rendering: crisp-edges;
 }
 
 .prop-overlay {
@@ -465,6 +471,8 @@ nav a:hover {
   flex-shrink: 0;
   border: 4px solid white;
   box-shadow: 0 3px 10px rgba(0, 0, 0, 0.15);
+  image-rendering: -webkit-optimize-contrast;
+  image-rendering: crisp-edges;
 }
 
 .testimonial-content {
@@ -509,6 +517,7 @@ nav a:hover {
   object-fit: cover;
   object-position: center;
   z-index: 1;
+  will-change: transform;
 }
 
 .cta-overlay {
@@ -616,7 +625,7 @@ nav a:hover {
 
 .social-icons {
   display: flex;
-  gap: 20px;  /* Aumentado el gap también */
+  gap: 20px;
   align-items: center;
 }
 
@@ -633,7 +642,7 @@ nav a:hover {
 }
 
 .social-icons img {
-  width: 50px;  /* Aumentado de 40px a 50px */
+  width: 50px;
   height: 50px;
   display: block;
   object-fit: contain;
@@ -651,87 +660,6 @@ nav a:hover {
   font-size: clamp(0.95rem, 2vw, 1.2rem);
   font-weight: 900;
   margin: 0;
-}
-
-/* RESPONSIVE para Footer */
-@media screen and (max-width: 968px) {
-  .footer-right {
-    gap: 20px;
-  }
-
-  .social-icons img {
-    width: 75px;  /* Aumentado de 35px a 45px */
-    height: 75px;
-  }
-}
-
-@media screen and (max-width: 768px) {
-  .main-footer {
-    padding: 30px 5%;
-  }
-
-  .footer-content {
-    flex-direction: column;
-    align-items: center;
-    text-align: center;
-    gap: 30px;
-  }
-
-  .footer-left {
-    align-items: center;
-  }
-
-  .copy {
-    text-align: center;
-    max-width: 100%;
-  }
-
-  .footer-right {
-    flex-direction: column;
-    align-items: center;
-    gap: 20px;
-  }
-
-  .contact-info {
-    align-items: center;
-  }
-
-  .social-icons {
-    gap: 55px;  /* Más espacio en móvil */
-  }
-
-  .social-icons img {
-    width: 62px;  /* Aumentado de 35px a 42px */
-    height: 6cqb;
-  }
-}
-
-@media screen and (max-width: 480px) {
-  .main-footer {
-    padding: 25px 3%;
-  }
-
-  .logo-footer {
-    font-size: 2rem;
-  }
-
-  .social-icons {
-    gap: 20px;
-  }
-
-  .social-icons img {
-    width: 58px;  /* Aumentado de 32px a 38px */
-    height: 58px;
-  }
-
-  .phone,
-  .email {
-    font-size: 0.9rem;
-  }
-
-  .copy {
-    font-size: 0.7rem;
-  }
 }
 
 /* RESPONSIVE */
@@ -773,8 +701,19 @@ nav a:hover {
   }
 
   .social-icons img {
-    width: 35px;
-    height: 35px;
+    width: 45px;
+    height: 45px;
+  }
+
+  .floating-badge {
+    width: 150px;
+    height: 150px;
+    top: -75px;
+    padding: 15px;
+  }
+
+  .search-section {
+    padding: 85px 20px 50px;
   }
 }
 
@@ -801,6 +740,7 @@ nav a:hover {
     width: 120px;
     height: 120px;
     top: -60px;
+    padding: 12px;
   }
 
   .search-section {
@@ -926,8 +866,8 @@ nav a:hover {
   }
 
   .social-icons img {
-    width: 35px;
-    height: 35px;
+    width: 42px;
+    height: 42px;
   }
 }
 
@@ -1028,14 +968,11 @@ nav a:hover {
   }
 
   .social-icons img {
-    width: 32px;
-    height: 32px;
+    width: 38px;
+    height: 38px;
   }
 
-  .phone {
-    padding-right: 1rem;
-    font-size: 0.9rem;
-  }
+  .phone,
   .email {
     font-size: 0.9rem;
   }
