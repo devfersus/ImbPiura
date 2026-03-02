@@ -1,6 +1,6 @@
 {
   "/api": {
-    "target": "http://localhost:5158",
+    "target": "http://fersus99-001-site1.ntempurl.com",
     "secure": false,
     "changeOrigin": true
   }
