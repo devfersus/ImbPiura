@@ -1,5 +1,7 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, signal, computed } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { AppService } from './app.service';
+import { PropiedadDetalle } from './models/property.component';
 
 @Component({
   selector: 'app-root',
@@ -9,45 +11,113 @@ import { CommonModule } from '@angular/common';
   styleUrls: ['./app.component.css']
 })
 export class AppComponent implements OnInit {
-  
-  propiedades = [
-    {
-      tag: 'PROPIEDADES DESTACADAS',
-      titulo: 'CASA EN LOS EJIDOS',
-      subtitulo: 'ESTRENO',
-      precio: 'US$ 400,000',
-      img: 'departamentos/depa1.jpg'  // ❌ SIN la barra inicial
-    },
-    {
-      tag: 'OPORTUNIDAD ÚNICA',
-      titulo: 'CASA EN MIRAFLORES COUNTRY CLUB',
-      subtitulo: 'ESTRENO',
-      precio: 'US$ 400,000',
-      img: 'departamentos/depa1.jpg'  // ❌ SIN la barra inicial
-    },
-    {
-      tag: 'INVIERTE EN UN TERRENO',
-      titulo: 'TERRENO EN EL CIRUELO',
-      subtitulo: 'INVERSIÓN',
-      precio: 'US$ 170 M²',
-      img: 'departamentos/depa1.jpg'  // ❌ SIN la barra inicial
-    }
-  ];
+
+  propiedades = signal<PropiedadDetalle[]>([]);
+  paginaActual = signal(1);
+  totalPaginas = signal(1);
+  paginas = computed(() =>
+    Array.from({ length: this.totalPaginas() }, (_, i) => i + 1)
+  );
+
+  private todasHeroPropiedades = signal<PropiedadDetalle[]>([]);
+  private filtros = signal({ tipoPropiedad: '', tipoListado: '', departamento: '' });
+
+  tiposPropiedad = computed(() =>
+    [...new Set(
+      this.todasHeroPropiedades()
+        .map(p => p.descripcionTipoPropiedad)
+        .filter((v): v is string => !!v)
+    )]
+  );
+
+  tiposListado = computed(() =>
+    [...new Set(
+      this.todasHeroPropiedades()
+        .map(p => p.descripcionTipoListado)
+        .filter((v): v is string => !!v)
+    )]
+  );
+
+  departamentos = computed(() =>
+    [...new Set(
+      this.todasHeroPropiedades()
+        .map(p => p.descripcionDepartamento)
+        .filter((v): v is string => !!v)
+    )]
+  );
+
+  propiedadesFiltradas = computed(() => {
+    const { tipoPropiedad, tipoListado, departamento } = this.filtros();
+    return this.todasHeroPropiedades().filter(p => {
+      const matchTipo        = !tipoPropiedad || p.descripcionTipoPropiedad  === tipoPropiedad;
+      const matchListado     = !tipoListado   || p.descripcionTipoListado    === tipoListado;
+      const matchDepartamento = !departamento  || p.descripcionDepartamento  === departamento;
+      return matchTipo && matchListado && matchDepartamento;
+    });
+  });
+
+  heroPaginaActual = signal(1);
+  heroTotalPaginas = computed(() =>
+    Math.ceil(this.propiedadesFiltradas().length / 6)
+  );
+  heroPaginas = computed(() =>
+    Array.from({ length: this.heroTotalPaginas() }, (_, i) => i + 1)
+  );
+  heroPropiedades = computed(() => {
+    const inicio = (this.heroPaginaActual() - 1) * 6;
+    return this.propiedadesFiltradas().slice(inicio, inicio + 6);
+  });
+
+  propiedadesPromo = computed(() =>
+    this.todasHeroPropiedades().filter(p => p.descripcionPromocion !== null)
+  );
 
   testimonios = [
-    { 
-      nombre: 'Carmen', 
-      edad: 42, 
+    {
+      nombre: 'Carmen',
+      edad: 42,
       comentario: 'Hicieron muy sencillo todo el proceso',
-      foto: 'departamentos/depa1.jpg'  // ❌ SIN la barra inicial
+      foto: 'departamentos/depa1.jpg'
     },
-    { 
-      nombre: 'Raúl', 
-      edad: 38, 
-      comentario: 'Encontré exactamente lo que buscaba', 
-      foto: 'persona/persona1.jpg'  // ❌ SIN la barra inicial
+    {
+      nombre: 'Raúl',
+      edad: 38,
+      comentario: 'Encontré exactamente lo que buscaba',
+      foto: 'persona/persona1.jpg'
     }
   ];
 
-  ngOnInit() {}
+  constructor(private appService: AppService) {}
+
+  ngOnInit() {
+    this.cargarPagina(1);
+    this.cargarTodasHeroPropiedades();
+  }
+
+  cargarPagina(pagina: number) {
+    this.appService.listarPropiedadDetalle(pagina).subscribe({
+      next: (data) => {
+        this.propiedades.set(data.items);
+        this.paginaActual.set(data.numeroPagina);
+        this.totalPaginas.set(data.totalPaginas);
+      },
+      error: (err) => console.error('Error al cargar propiedades', err)
+    });
+  }
+
+  cargarPaginaHero(pagina: number) {
+    this.heroPaginaActual.set(pagina);
+  }
+
+  buscar(tipoPropiedad: string, tipoListado: string, departamento: string) {
+    this.heroPaginaActual.set(1);
+    this.filtros.set({ tipoPropiedad, tipoListado, departamento });
+  }
+
+  private cargarTodasHeroPropiedades() {
+    this.appService.listarPropiedadDetalle(1, 1000).subscribe({
+      next: (data) => this.todasHeroPropiedades.set(data.items),
+      error: (err) => console.error('Error al cargar propiedades hero', err)
+    });
+  }
 }

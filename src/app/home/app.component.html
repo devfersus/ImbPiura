@@ -23,21 +23,52 @@
       <h1 class="main-title">LO QUE BUSCAS, LO TENEMOS</h1>
 
       <div class="dark-search-bar">
-        <select>
-          <option>Tipo de Propiedad</option>
-          <option>Casa</option>
-          <option>Departamento</option>
-          <option>Terreno</option>
+        <select #selectTipo>
+          <option value="" disabled selected hidden>Tipo de Propiedad</option>
+          <option *ngFor="let tipo of tiposPropiedad()" [value]="tipo">{{tipo}}</option>
         </select>
-        <select>
-          <option>Tipo de Listado</option>
-          <option>Venta</option>
-          <option>Alquiler</option>
+        <select #selectListado>
+          <option value="" disabled selected hidden>Tipo de Listado</option>
+          <option *ngFor="let listado of tiposListado()" [value]="listado">{{listado}}</option>
         </select>
         <div class="input-with-icon">
-          <input type="text" placeholder="En donde">
+          <select #selectDonde class="select-donde">
+            <option value="" disabled selected hidden>En donde</option>
+            <option *ngFor="let dep of departamentos()" [value]="dep">{{dep}}</option>
+          </select>
           <span class="loc-icon">📍</span>
-          <span class="search-icon">🔍</span>
+          <span class="search-icon" (click)="buscar(selectTipo.value, selectListado.value, selectDonde.value)">🔍</span>
+        </div>
+      </div>
+
+      <div class="hero-props-section">
+        <div class="hero-prop-grid">
+          <div class="prop-card" *ngFor="let prop of heroPropiedades()">
+            <!-- <div class="card-tag">PROPIEDAD DESTACADA</div> -->
+            <div class="card-content">
+              <div class="white-frame">
+                <img [src]="prop.foto" [alt]="prop.titulo" class="prop-image" loading="lazy">
+              </div>
+              <div class="prop-info">
+                <h3>{{prop.titulo}}</h3>
+                <span class="sub">{{prop.descripcion}}</span>
+                <p class="price">US$ {{prop.precio | number}}</p>
+                <button class="btn-ver-mas">VER MÁS</button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="pagination hero-pagination">
+          <button class="page-btn" [disabled]="heroPaginaActual() === 1" (click)="cargarPaginaHero(heroPaginaActual() - 1)">&#8249;</button>
+          <button
+            class="page-btn"
+            *ngFor="let p of heroPaginas()"
+            [class.active]="p === heroPaginaActual()"
+            (click)="cargarPaginaHero(p)">
+            {{ p }}
+          </button>
+          <button class="page-btn" [disabled]="heroPaginaActual() === heroTotalPaginas()" (click)="cargarPaginaHero(heroPaginaActual() + 1)">&#8250;</button>
         </div>
       </div>
 
@@ -54,22 +85,19 @@
     <h2 class="contact-number">943 449 197 /// lotengoinm@gmail.com</h2>
   </div>
 
-  <section class="properties-container">
+  <!-- Sección Promociones -->
+  <section class="promo-container" *ngIf="propiedadesPromo().length > 0">
     <div class="prop-grid">
-      <div class="prop-card" *ngFor="let prop of propiedades">
-        <div class="card-tag">{{prop.tag}}</div>
+      <div class="prop-card" *ngFor="let prop of propiedadesPromo()">
+        <div class="card-tag">{{prop.descripcionPromocion}}</div>
         <div class="card-content">
           <div class="white-frame">
-            <img [src]="prop.img" [alt]="prop.titulo" class="prop-image" loading="lazy">
-            <div class="prop-overlay">
-              <img src="logos/logo.png" alt="Lo Tengo" class="prop-logo" loading="lazy">
-              <p class="prop-phone">943449197</p>
-            </div>
+            <img [src]="prop.foto" [alt]="prop.titulo" class="prop-image" loading="lazy">
           </div>
           <div class="prop-info">
             <h3>{{prop.titulo}}</h3>
-            <span class="sub">{{prop.subtitulo}}</span>
-            <p class="price">{{prop.precio}}</p>
+            <span class="sub">{{prop.descripcion}}</span>
+            <p class="price">US$ {{prop.precio | number}}</p>
             <button class="btn-ver-mas">VER MÁS</button>
           </div>
         </div>
