@@ -2,14 +2,14 @@
   <header class="nav-yellow">
     <div class="logo-top">LO<br>TENGO!</div>
     <nav>
-      <a href="#">INICIO</a>
-      <a href="#">PROPIEDADES</a>
-      <a href="#">CONTACTO</a>
+      <a href="#inicio">INICIO</a>
+      <a href="#propiedades">PROPIEDADES</a>
+      <a href="#contacto">CONTACTO</a>
     </nav>
   </header>
   <div class="black-bar"></div>
 
-  <section class="hero">
+  <section class="hero" id="inicio">
     <div class="hero-img-container">
       <img src="logos/llaves.jpg" alt="Venta" class="hero-bg" loading="eager">
     </div>
@@ -41,7 +41,7 @@
         </div>
       </div>
 
-      <div class="hero-props-section">
+      <div class="hero-props-section" id="propiedades">
         <div class="hero-prop-grid">
           <div class="prop-card" *ngFor="let prop of heroPropiedades()">
             <!-- <div class="card-tag">PROPIEDAD DESTACADA</div> -->
@@ -132,7 +132,7 @@
   <div class="black-bar"></div>
 
   <!-- NUEVA SECCIÓN: "Sabemos lo que buscas" -->
-  <section class="cta-wrapper">
+  <section class="cta-wrapper" id="contacto">
     <div class="cta-section">
       <img src="logos/portada.jpg" alt="Cliente satisfecho" class="cta-bg-image" loading="lazy">
 
