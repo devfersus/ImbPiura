@@ -1,7 +1,7 @@
 import { Component, OnInit, signal, computed } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { AppService } from './app.service';
-import { PropiedadDetalle } from './models/property.component';
+import { PropiedadDetalle, PropiedadAgrupada } from './models/property.component';
 
 @Component({
   selector: 'app-root',
@@ -21,6 +21,10 @@ export class AppComponent implements OnInit {
 
   private todasHeroPropiedades = signal<PropiedadDetalle[]>([]);
   private filtros = signal({ tipoPropiedad: '', tipoListado: '', departamento: '' });
+
+  modalAbierto = signal(false);
+  propiedadModal = signal<PropiedadAgrupada | null>(null);
+  fotoLightbox = signal<string | null>(null);
 
   tiposPropiedad = computed(() =>
     [...new Set(
@@ -46,31 +50,36 @@ export class AppComponent implements OnInit {
     )]
   );
 
-  propiedadesFiltradas = computed(() => {
+  private propiedadesFiltradas = computed(() => {
     const { tipoPropiedad, tipoListado, departamento } = this.filtros();
     return this.todasHeroPropiedades().filter(p => {
-      const matchTipo        = !tipoPropiedad || p.descripcionTipoPropiedad  === tipoPropiedad;
-      const matchListado     = !tipoListado   || p.descripcionTipoListado    === tipoListado;
+      const matchTipo         = !tipoPropiedad || p.descripcionTipoPropiedad === tipoPropiedad;
+      const matchListado      = !tipoListado   || p.descripcionTipoListado   === tipoListado;
       const matchDepartamento = !departamento  || p.descripcionDepartamento  === departamento;
       return matchTipo && matchListado && matchDepartamento;
     });
   });
 
+  private propiedadesFiltradasAgrupadas = computed(() =>
+    this.agruparPropiedades(this.propiedadesFiltradas())
+  );
+
   heroPaginaActual = signal(1);
   heroTotalPaginas = computed(() =>
-    Math.ceil(this.propiedadesFiltradas().length / 6)
+    Math.ceil(this.propiedadesFiltradasAgrupadas().length / 6)
   );
   heroPaginas = computed(() =>
     Array.from({ length: this.heroTotalPaginas() }, (_, i) => i + 1)
   );
   heroPropiedades = computed(() => {
     const inicio = (this.heroPaginaActual() - 1) * 6;
-    return this.propiedadesFiltradas().slice(inicio, inicio + 6);
+    return this.propiedadesFiltradasAgrupadas().slice(inicio, inicio + 6);
   });
 
-  propiedadesPromo = computed(() =>
-    this.todasHeroPropiedades().filter(p => p.descripcionPromocion !== null)
-  );
+  propiedadesPromo = computed(() => {
+    const promos = this.todasHeroPropiedades().filter(p => p.descripcionPromocion !== null);
+    return this.agruparPropiedades(promos);
+  });
 
   testimonios = [
     {
@@ -112,6 +121,48 @@ export class AppComponent implements OnInit {
   buscar(tipoPropiedad: string, tipoListado: string, departamento: string) {
     this.heroPaginaActual.set(1);
     this.filtros.set({ tipoPropiedad, tipoListado, departamento });
+  }
+
+  abrirModal(prop: PropiedadAgrupada) {
+    this.propiedadModal.set(prop);
+    this.modalAbierto.set(true);
+  }
+
+  cerrarModal() {
+    this.modalAbierto.set(false);
+    this.propiedadModal.set(null);
+  }
+
+  abrirLightbox(foto: string) {
+    this.fotoLightbox.set(foto);
+  }
+
+  cerrarLightbox() {
+    this.fotoLightbox.set(null);
+  }
+
+  private agruparPropiedades(items: PropiedadDetalle[]): PropiedadAgrupada[] {
+    const grupos = new Map<string, PropiedadAgrupada>();
+    for (const item of items) {
+      const key = `${item.titulo}||${item.descripcion}`;
+      if (grupos.has(key)) {
+        grupos.get(key)!.fotos.push(item.foto);
+      } else {
+        grupos.set(key, {
+          titulo: item.titulo,
+          descripcion: item.descripcion,
+          precio: item.precio,
+          fotos: [item.foto],
+          fotoPortada: item.foto,
+          descripcionTipoPropiedad: item.descripcionTipoPropiedad,
+          descripcionTipoListado: item.descripcionTipoListado,
+          descripcionDepartamento: item.descripcionDepartamento,
+          descripcionPromocion: item.descripcionPromocion,
+          activo: item.activo,
+        });
+      }
+    }
+    return Array.from(grupos.values());
   }
 
   private cargarTodasHeroPropiedades() {

@@ -23,6 +23,19 @@ export interface PropiedadDetallePaginado {
   numeroPagina: number;
 }
 
+export interface PropiedadAgrupada {
+  titulo: string;
+  descripcion: string;
+  precio: number;
+  fotos: string[];
+  fotoPortada: string;
+  descripcionTipoPropiedad: string | null;
+  descripcionTipoListado: string | null;
+  descripcionDepartamento: string | null;
+  descripcionPromocion: string;
+  activo: boolean;
+}
+
 export interface Testimonio {
   nombre: string;
   edad: number;

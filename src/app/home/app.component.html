@@ -44,16 +44,15 @@
       <div class="hero-props-section" id="propiedades">
         <div class="hero-prop-grid">
           <div class="prop-card" *ngFor="let prop of heroPropiedades()">
-            <!-- <div class="card-tag">PROPIEDAD DESTACADA</div> -->
             <div class="card-content">
               <div class="white-frame">
-                <img [src]="prop.foto" [alt]="prop.titulo" class="prop-image" loading="lazy">
+                <img [src]="prop.fotoPortada" [alt]="prop.titulo" class="prop-image" loading="lazy">
               </div>
               <div class="prop-info">
                 <h3>{{prop.titulo}}</h3>
                 <span class="sub">{{prop.descripcion}}</span>
                 <p class="price">US$ {{prop.precio | number}}</p>
-                <button class="btn-ver-mas">VER MÁS</button>
+                <button class="btn-ver-mas" (click)="abrirModal(prop)">VER MÁS</button>
               </div>
             </div>
           </div>
@@ -92,13 +91,13 @@
         <div class="card-tag">{{prop.descripcionPromocion}}</div>
         <div class="card-content">
           <div class="white-frame">
-            <img [src]="prop.foto" [alt]="prop.titulo" class="prop-image" loading="lazy">
+            <img [src]="prop.fotoPortada" [alt]="prop.titulo" class="prop-image" loading="lazy">
           </div>
           <div class="prop-info">
             <h3>{{prop.titulo}}</h3>
             <span class="sub">{{prop.descripcion}}</span>
             <p class="price">US$ {{prop.precio | number}}</p>
-            <button class="btn-ver-mas">VER MÁS</button>
+            <button class="btn-ver-mas" (click)="abrirModal(prop)">VER MÁS</button>
           </div>
         </div>
       </div>
@@ -179,4 +178,38 @@
       </div>
     </div>
   </footer>
+</div>
+
+<!-- Lightbox -->
+<div class="lightbox-overlay" *ngIf="fotoLightbox()" (click)="cerrarLightbox()">
+  <img
+    [src]="fotoLightbox()"
+    alt="Foto ampliada"
+    class="lightbox-img"
+    (click)="$event.stopPropagation()">
+</div>
+
+<!-- Modal Galería de Fotos -->
+<div class="modal-overlay" *ngIf="modalAbierto()" (click)="cerrarModal()">
+  <div class="modal-box" (click)="$event.stopPropagation()">
+
+    <div class="modal-header">
+      <div class="modal-header-info">
+        <h2 class="modal-titulo">{{propiedadModal()?.titulo}}</h2>
+        <span class="modal-descripcion">{{propiedadModal()?.descripcion}}</span>
+      </div>
+      <button class="modal-close" (click)="cerrarModal()">✕</button>
+    </div>
+
+    <div class="modal-body">
+      <div class="modal-gallery">
+        <div class="modal-foto-item" *ngFor="let foto of propiedadModal()?.fotos" (click)="abrirLightbox(foto)">
+          <div class="modal-foto-frame">
+            <img [src]="foto" [alt]="propiedadModal()?.titulo" loading="lazy">
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
 </div>
