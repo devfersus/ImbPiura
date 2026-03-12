@@ -3,7 +3,7 @@
     <div class="logo-top">LO<br>TENGO!</div>
     <nav>
       <a href="#inicio">INICIO</a>
-      <a href="#propiedades">PROPIEDADES</a>
+      <a routerLink="/propiedades">PROPIEDADES</a>
       <a href="#contacto">CONTACTO</a>
     </nav>
   </header>
@@ -41,36 +41,6 @@
         </div>
       </div>
 
-      <div class="hero-props-section" id="propiedades">
-        <div class="hero-prop-grid">
-          <div class="prop-card" *ngFor="let prop of heroPropiedades()">
-            <div class="card-content">
-              <div class="white-frame">
-                <img [src]="prop.fotoPortada" [alt]="prop.titulo" class="prop-image" loading="lazy">
-              </div>
-              <div class="prop-info">
-                <h3>{{prop.titulo}}</h3>
-                <span class="sub">{{prop.descripcion}}</span>
-                <p class="price">US$ {{prop.precio | number}}</p>
-                <button class="btn-ver-mas" (click)="abrirModal(prop)">VER MÁS</button>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <div class="pagination hero-pagination">
-          <button class="page-btn" [disabled]="heroPaginaActual() === 1" (click)="cargarPaginaHero(heroPaginaActual() - 1)">&#8249;</button>
-          <button
-            class="page-btn"
-            *ngFor="let p of heroPaginas()"
-            [class.active]="p === heroPaginaActual()"
-            (click)="cargarPaginaHero(p)">
-            {{ p }}
-          </button>
-          <button class="page-btn" [disabled]="heroPaginaActual() === heroTotalPaginas()" (click)="cargarPaginaHero(heroPaginaActual() + 1)">&#8250;</button>
-        </div>
-      </div>
-
       <p class="hero-footer-text">
         CASAS, DEPARTAMENTOS, TERRENOS, LOS TENEMOS TODOS.<br>
         <strong>MÁS DE 8 AÑOS</strong> HACIENDO REALIDAD LA BÚSQUEDA DE CADA<br>
@@ -90,14 +60,15 @@
       <div class="prop-card" *ngFor="let prop of propiedadesPromo()">
         <div class="card-tag">{{prop.descripcionPromocion}}</div>
         <div class="card-content">
-          <div class="white-frame">
-            <img [src]="prop.fotoPortada" [alt]="prop.titulo" class="prop-image" loading="lazy">
+          <div class="white-frame" [routerLink]="['/propiedad', prop.slug]" style="cursor:pointer">
+            <img *ngIf="prop.fotoPortada" [src]="prop.fotoPortada" [alt]="prop.titulo" class="prop-image" loading="lazy">
+            <div *ngIf="!prop.fotoPortada" class="no-foto">SIN FOTO</div>
           </div>
           <div class="prop-info">
             <h3>{{prop.titulo}}</h3>
             <span class="sub">{{prop.descripcion}}</span>
             <p class="price">US$ {{prop.precio | number}}</p>
-            <button class="btn-ver-mas" (click)="abrirModal(prop)">VER MÁS</button>
+            <a class="btn-ver-mas" [routerLink]="['/propiedad', prop.slug]">VER MÁS</a>
           </div>
         </div>
       </div>
@@ -147,7 +118,7 @@
               PORQUE<br>
               <span class="highlight">PENSAMOS<br>COMO TÚ</span>
             </h2>
-            <button class="btn-cta">QUIERO BUSCAR AHORA</button>
+            <button class="btn-cta" routerLink="/propiedades">QUIERO BUSCAR AHORA</button>
           </div>
         </div>
       </div>
@@ -164,10 +135,10 @@
 
       <div class="footer-right">
         <div class="social-icons">
-          <a href="#" target="_blank">
+          <a href="https://www.facebook.com/lotengoinmobiliaria?locale=es_LA" target="_blank" rel="noopener">
             <img src="iconos/facebook.png" alt="Facebook" loading="lazy">
           </a>
-          <a href="#" target="_blank">
+          <a href="https://www.instagram.com/lotengo.inmobiliaria/" target="_blank" rel="noopener">
             <img src="iconos/instagram.png" alt="Instagram" loading="lazy">
           </a>
         </div>
@@ -178,38 +149,4 @@
       </div>
     </div>
   </footer>
-</div>
-
-<!-- Lightbox -->
-<div class="lightbox-overlay" *ngIf="fotoLightbox()" (click)="cerrarLightbox()">
-  <img
-    [src]="fotoLightbox()"
-    alt="Foto ampliada"
-    class="lightbox-img"
-    (click)="$event.stopPropagation()">
-</div>
-
-<!-- Modal Galería de Fotos -->
-<div class="modal-overlay" *ngIf="modalAbierto()" (click)="cerrarModal()">
-  <div class="modal-box" (click)="$event.stopPropagation()">
-
-    <div class="modal-header">
-      <div class="modal-header-info">
-        <h2 class="modal-titulo">{{propiedadModal()?.titulo}}</h2>
-        <span class="modal-descripcion">{{propiedadModal()?.descripcion}}</span>
-      </div>
-      <button class="modal-close" (click)="cerrarModal()">✕</button>
-    </div>
-
-    <div class="modal-body">
-      <div class="modal-gallery">
-        <div class="modal-foto-item" *ngFor="let foto of propiedadModal()?.fotos" (click)="abrirLightbox(foto)">
-          <div class="modal-foto-frame">
-            <img [src]="foto" [alt]="propiedadModal()?.titulo" loading="lazy">
-          </div>
-        </div>
-      </div>
-    </div>
-
-  </div>
 </div>

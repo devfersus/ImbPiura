@@ -1,0 +1,159 @@
+<div class="page-container">
+
+  <!-- Header -->
+  <header class="nav-yellow">
+    <a routerLink="/" class="logo-top">LO<br>TENGO!</a>
+    <nav>
+      <a routerLink="/">INICIO</a>
+      <a routerLink="/propiedades">PROPIEDADES</a>
+      <a routerLink="/" fragment="contacto">CONTACTO</a>
+    </nav>
+  </header>
+  <div class="black-bar"></div>
+
+  <!-- Cargando -->
+  <div class="estado-carga" *ngIf="cargando()">
+    <p>Cargando propiedad...</p>
+  </div>
+
+  <!-- No encontrada -->
+  <div class="estado-carga" *ngIf="!cargando() && !propiedad()">
+    <p>Propiedad no encontrada.</p>
+    <a routerLink="/propiedades" class="btn-accion">VER PROPIEDADES</a>
+  </div>
+
+  <ng-container *ngIf="!cargando() && propiedad()">
+
+    <!-- Breadcrumb + Título -->
+    <div class="detalle-header">
+      <div class="breadcrumb">
+        <a routerLink="/">Inicio</a>
+        <span>/</span>
+        <a routerLink="/propiedades">Propiedades</a>
+        <span>/</span>
+        <span>{{ propiedad()?.titulo }}</span>
+      </div>
+      <div class="titulo-wrap">
+        <div class="promo-badge" *ngIf="propiedad()?.descripcionPromocion">
+          {{ propiedad()?.descripcionPromocion }}
+        </div>
+        <h1 class="prop-titulo">{{ propiedad()?.titulo }}</h1>
+      </div>
+    </div>
+
+    <!-- Galería: imagen grande + lista vertical de fotos -->
+    <div class="galeria-wrap">
+
+      <!-- Imagen principal con flechas -->
+      <div class="foto-principal" (click)="abrirLightbox(fotoActualUrl())">
+        <button class="flecha flecha-izq" (click)="anteriorFoto(); $event.stopPropagation()" *ngIf="totalFotos() > 1">&#8249;</button>
+        <img [src]="fotoActualUrl()" [alt]="propiedad()?.titulo" loading="eager">
+        <button class="flecha flecha-der" (click)="siguienteFoto(); $event.stopPropagation()" *ngIf="totalFotos() > 1">&#8250;</button>
+        <span class="foto-contador" *ngIf="totalFotos() > 1">{{ fotoActual() + 1 }} / {{ totalFotos() }}</span>
+      </div>
+
+      <!-- Lista vertical de miniaturas -->
+      <div class="lista-fotos" *ngIf="totalFotos() > 1">
+        <div
+          class="miniatura"
+          *ngFor="let foto of fotos(); let i = index"
+          [class.activa]="i === fotoActual()"
+          (click)="seleccionarFoto(i)">
+          <img [src]="foto" [alt]="propiedad()?.titulo" loading="lazy">
+        </div>
+      </div>
+
+    </div>
+
+    <!-- Detalles + Descripción -->
+    <div class="detalle-body">
+
+      <div class="detalles-row">
+        <div class="detalle-item">
+          <span class="det-icon">🏷</span>
+          <div class="det-texto">
+            <span class="det-label">Precio</span>
+            <span class="det-valor">US$ {{ propiedad()?.precio | number }}</span>
+          </div>
+        </div>
+        <div class="detalle-item" *ngIf="propiedad()?.descripcionTipoPropiedad">
+          <span class="det-icon">🏠</span>
+          <div class="det-texto">
+            <span class="det-label">Tipo de propiedad</span>
+            <span class="det-valor">{{ propiedad()?.descripcionTipoPropiedad }}</span>
+          </div>
+        </div>
+        <div class="detalle-item" *ngIf="propiedad()?.descripcionTipoListado">
+          <span class="det-icon">📋</span>
+          <div class="det-texto">
+            <span class="det-label">Tipo de listado</span>
+            <span class="det-valor">{{ propiedad()?.descripcionTipoListado }}</span>
+          </div>
+        </div>
+        <div class="detalle-item" *ngIf="propiedad()?.descripcionDepartamento">
+          <span class="det-icon">📍</span>
+          <div class="det-texto">
+            <span class="det-label">Departamento</span>
+            <span class="det-valor">{{ propiedad()?.descripcionDepartamento }}</span>
+          </div>
+        </div>
+        <div class="detalle-item" *ngIf="propiedad()?.areaTerreno">
+          <span class="det-icon">📐</span>
+          <div class="det-texto">
+            <span class="det-label">Área</span>
+            <span class="det-valor">{{ propiedad()?.areaTerreno }} m²</span>
+          </div>
+        </div>
+        <div class="detalle-item" *ngIf="propiedad()?.ubicacion">
+          <span class="det-icon">🗺</span>
+          <div class="det-texto">
+            <span class="det-label">Ubicación</span>
+            <span class="det-valor">{{ propiedad()?.ubicacion }}</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="separador"></div>
+
+      <div class="descripcion-wrap" *ngIf="propiedad()?.descripcion">
+        <p class="descripcion-texto">{{ propiedad()?.descripcion }}</p>
+      </div>
+
+      <div class="descripcion-wrap" *ngIf="propiedad()?.descripcionFinal">
+        <p class="descripcion-texto">{{ propiedad()?.descripcionFinal }}</p>
+      </div>
+
+      <div class="acciones">
+        <a routerLink="/propiedades" class="btn-accion">&#8592; Ver más propiedades</a>
+      </div>
+
+    </div>
+
+  </ng-container>
+
+  <!-- Footer -->
+  <footer class="main-footer">
+    <div class="footer-content">
+      <div class="footer-left">
+        <div class="logo-footer">LO<br>TENGO!</div>
+        <p class="copy">© Todos los derechos reservados Lo Tengo! Inmobiliaria 2021</p>
+      </div>
+      <div class="footer-right">
+        <div class="social-icons">
+          <a href="https://www.facebook.com/lotengoinmobiliaria?locale=es_LA" target="_blank" rel="noopener"><img src="iconos/facebook.png" alt="Facebook" loading="lazy"></a>
+          <a href="https://www.instagram.com/lotengo.inmobiliaria/" target="_blank" rel="noopener"><img src="iconos/instagram.png" alt="Instagram" loading="lazy"></a>
+        </div>
+        <div class="contact-info">
+          <p class="phone">943 449 197</p>
+          <p class="email">lotengoinm@gmail.com</p>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+</div>
+
+<!-- Lightbox -->
+<div class="lightbox-overlay" *ngIf="lightboxFoto()" (click)="cerrarLightbox()">
+  <img [src]="lightboxFoto()" alt="Foto ampliada" class="lightbox-img" (click)="$event.stopPropagation()">
+</div>

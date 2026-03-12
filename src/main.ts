@@ -1,17 +1,5 @@
 import { bootstrapApplication } from '@angular/platform-browser';
-import { provideRouter } from '@angular/router';
-import { provideHttpClient, withFetch } from '@angular/common/http';
-import { AppComponent  } from './app/home/app.component';
+import { AppComponent } from './app/app';
+import { appConfig } from './app/app.config';
 
-const routes = [
-  { path: '', component: AppComponent },
-  { path: 'propiedades', component: AppComponent },
-  { path: 'contacto', component: AppComponent }
-];
-
-bootstrapApplication(AppComponent, {
-  providers: [
-    provideRouter(routes),
-    provideHttpClient(withFetch())
-  ]
-});
+bootstrapApplication(AppComponent, appConfig);

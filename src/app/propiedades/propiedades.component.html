@@ -1,0 +1,127 @@
+<div class="page-container">
+
+  <!-- Header -->
+  <header class="nav-yellow">
+    <a routerLink="/" class="logo-top">LO<br>TENGO!</a>
+    <nav>
+      <a routerLink="/" fragment="inicio">INICIO</a>
+      <a routerLink="/propiedades" class="active">PROPIEDADES</a>
+      <a routerLink="/" fragment="contacto">CONTACTO</a>
+    </nav>
+  </header>
+  <div class="black-bar"></div>
+
+  <!-- Banner superior -->
+  <div class="banner-props">
+    <h1>
+      <span *ngIf="filtroTipo()">{{ filtroTipo() }}</span>
+      <span *ngIf="filtroListado()"> — {{ filtroListado() }}</span>
+      <span *ngIf="filtroDepartamento()"> en {{ filtroDepartamento() }}</span>
+      <span *ngIf="!filtroTipo() && !filtroListado() && !filtroDepartamento()">Todas las Propiedades</span>
+    </h1>
+  </div>
+
+  <!-- Filtros -->
+  <div class="filtros-bar">
+    <select #sTipo [value]="filtroTipo()">
+      <option value="">Tipo de Propiedad</option>
+      <option *ngFor="let tipo of tiposPropiedad()" [value]="tipo">{{ tipo }}</option>
+    </select>
+
+    <select #sListado [value]="filtroListado()">
+      <option value="">Tipo de Listado</option>
+      <option *ngFor="let l of tiposListado()" [value]="l">{{ l }}</option>
+    </select>
+
+    <select #sDonde [value]="filtroDepartamento()">
+      <option value="">En donde</option>
+      <option *ngFor="let dep of departamentos()" [value]="dep">{{ dep }}</option>
+    </select>
+
+    <button class="btn-filtrar" (click)="filtrar(sTipo.value, sListado.value, sDonde.value)">
+      BUSCAR
+    </button>
+
+    <a routerLink="/" class="btn-limpiar" *ngIf="filtroTipo() || filtroListado() || filtroDepartamento()">
+      LIMPIAR FILTROS
+    </a>
+  </div>
+
+  <!-- Contenido principal -->
+  <div class="main-content">
+
+    <!-- Cargando -->
+    <div class="estado-carga" *ngIf="cargando()">
+      <p>Cargando propiedades...</p>
+    </div>
+
+    <!-- Sin resultados -->
+    <div class="sin-resultados" *ngIf="!cargando() && totalResultados() === 0">
+      <p>No se encontraron propiedades con los filtros seleccionados.</p>
+      <a routerLink="/propiedades" class="btn-filtrar">VER TODAS</a>
+    </div>
+
+    <!-- Grid de propiedades -->
+    <div class="props-grid" *ngIf="!cargando() && totalResultados() > 0">
+      <div class="resultado-count">
+        {{ totalResultados() }} propiedad{{ totalResultados() !== 1 ? 'es' : '' }} encontrada{{ totalResultados() !== 1 ? 's' : '' }}
+      </div>
+
+      <div class="prop-grid">
+        <div class="prop-card" *ngFor="let prop of propiedadesPagina()">
+          <div class="card-content">
+            <div class="white-frame" [routerLink]="['/propiedad', prop.slug]" style="cursor:pointer">
+              <img *ngIf="prop.fotoPortada" [src]="prop.fotoPortada" [alt]="prop.titulo" class="prop-image" loading="lazy">
+              <div *ngIf="!prop.fotoPortada" class="no-foto">SIN FOTO</div>
+            </div>
+            <div class="prop-info">
+              <h3>{{ prop.titulo }}</h3>
+              <span class="sub">{{ prop.descripcion }}</span>
+              <p class="dep-label" *ngIf="prop.descripcionDepartamento">📍 {{ prop.descripcionDepartamento }}</p>
+              <p class="price">US$ {{ prop.precio | number }}</p>
+              <a class="btn-ver-mas" [routerLink]="['/propiedad', prop.slug]">VER MÁS</a>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Paginación -->
+      <div class="pagination" *ngIf="totalPaginas() > 1">
+        <button class="page-btn" [disabled]="paginaActual() === 1" (click)="irAPagina(paginaActual() - 1)">&#8249;</button>
+        <button
+          class="page-btn"
+          *ngFor="let p of paginas()"
+          [class.active]="p === paginaActual()"
+          (click)="irAPagina(p)">
+          {{ p }}
+        </button>
+        <button class="page-btn" [disabled]="paginaActual() === totalPaginas()" (click)="irAPagina(paginaActual() + 1)">&#8250;</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <footer class="main-footer">
+    <div class="footer-content">
+      <div class="footer-left">
+        <div class="logo-footer">LO<br>TENGO!</div>
+        <p class="copy">© Todos los derechos reservados Lo Tengo! Inmobiliaria 2021</p>
+      </div>
+      <div class="footer-right">
+        <div class="social-icons">
+          <a href="https://www.facebook.com/lotengoinmobiliaria?locale=es_LA" target="_blank" rel="noopener">
+            <img src="iconos/facebook.png" alt="Facebook" loading="lazy">
+          </a>
+          <a href="https://www.instagram.com/lotengo.inmobiliaria/" target="_blank" rel="noopener">
+            <img src="iconos/instagram.png" alt="Instagram" loading="lazy">
+          </a>
+        </div>
+        <div class="contact-info">
+          <p class="phone">943 449 197</p>
+          <p class="email">lotengoinm@gmail.com</p>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+</div>

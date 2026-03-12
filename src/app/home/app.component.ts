@@ -1,34 +1,24 @@
-import { Component, OnInit, signal, computed } from '@angular/core';
+import { Component, OnInit, signal, computed, ChangeDetectionStrategy } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { Router, RouterLink } from '@angular/router';
 import { AppService } from './app.service';
 import { PropiedadDetalle, PropiedadAgrupada } from './models/property.component';
 
 @Component({
-  selector: 'app-root',
+  selector: 'app-home',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, RouterLink],
   templateUrl: './app.component.html',
-  styleUrls: ['./app.component.css']
+  styleUrls: ['./app.component.css'],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class AppComponent implements OnInit {
+export class HomeComponent implements OnInit {
 
-  propiedades = signal<PropiedadDetalle[]>([]);
-  paginaActual = signal(1);
-  totalPaginas = signal(1);
-  paginas = computed(() =>
-    Array.from({ length: this.totalPaginas() }, (_, i) => i + 1)
-  );
-
-  private todasHeroPropiedades = signal<PropiedadDetalle[]>([]);
-  private filtros = signal({ tipoPropiedad: '', tipoListado: '', departamento: '' });
-
-  modalAbierto = signal(false);
-  propiedadModal = signal<PropiedadAgrupada | null>(null);
-  fotoLightbox = signal<string | null>(null);
+  private todasPropiedades = signal<PropiedadDetalle[]>([]);
 
   tiposPropiedad = computed(() =>
     [...new Set(
-      this.todasHeroPropiedades()
+      this.todasPropiedades()
         .map(p => p.descripcionTipoPropiedad)
         .filter((v): v is string => !!v)
     )]
@@ -36,7 +26,7 @@ export class AppComponent implements OnInit {
 
   tiposListado = computed(() =>
     [...new Set(
-      this.todasHeroPropiedades()
+      this.todasPropiedades()
         .map(p => p.descripcionTipoListado)
         .filter((v): v is string => !!v)
     )]
@@ -44,131 +34,59 @@ export class AppComponent implements OnInit {
 
   departamentos = computed(() =>
     [...new Set(
-      this.todasHeroPropiedades()
+      this.todasPropiedades()
         .map(p => p.descripcionDepartamento)
         .filter((v): v is string => !!v)
     )]
   );
 
-  private propiedadesFiltradas = computed(() => {
-    const { tipoPropiedad, tipoListado, departamento } = this.filtros();
-    return this.todasHeroPropiedades().filter(p => {
-      const matchTipo         = !tipoPropiedad || p.descripcionTipoPropiedad === tipoPropiedad;
-      const matchListado      = !tipoListado   || p.descripcionTipoListado   === tipoListado;
-      const matchDepartamento = !departamento  || p.descripcionDepartamento  === departamento;
-      return matchTipo && matchListado && matchDepartamento;
-    });
-  });
-
-  private propiedadesFiltradasAgrupadas = computed(() =>
-    this.agruparPropiedades(this.propiedadesFiltradas())
+  propiedadesPromo = computed(() =>
+    this.todasPropiedades()
+      .filter(p => !!p.descripcionPromocion)
+      .map(p => this.mapearPropiedad(p))
   );
 
-  heroPaginaActual = signal(1);
-  heroTotalPaginas = computed(() =>
-    Math.ceil(this.propiedadesFiltradasAgrupadas().length / 6)
-  );
-  heroPaginas = computed(() =>
-    Array.from({ length: this.heroTotalPaginas() }, (_, i) => i + 1)
-  );
-  heroPropiedades = computed(() => {
-    const inicio = (this.heroPaginaActual() - 1) * 6;
-    return this.propiedadesFiltradasAgrupadas().slice(inicio, inicio + 6);
-  });
-
-  propiedadesPromo = computed(() => {
-    const promos = this.todasHeroPropiedades().filter(p => p.descripcionPromocion !== null);
-    return this.agruparPropiedades(promos);
-  });
-
-  testimonios = [
-    {
-      nombre: 'Carmen',
-      edad: 42,
-      comentario: 'Hicieron muy sencillo todo el proceso',
-      foto: 'departamentos/depa1.jpg'
-    },
-    {
-      nombre: 'Raúl',
-      edad: 38,
-      comentario: 'Encontré exactamente lo que buscaba',
-      foto: 'persona/persona1.jpg'
-    }
-  ];
-
-  constructor(private appService: AppService) {}
+  constructor(private appService: AppService, private router: Router) {}
 
   ngOnInit() {
-    this.cargarPagina(1);
-    this.cargarTodasHeroPropiedades();
-  }
-
-  cargarPagina(pagina: number) {
-    this.appService.listarPropiedadDetalle(pagina).subscribe({
-      next: (data) => {
-        this.propiedades.set(data.items);
-        this.paginaActual.set(data.numeroPagina);
-        this.totalPaginas.set(data.totalPaginas);
-      },
+    this.appService.listarPropiedadDetalle(1, 1000).subscribe({
+      next: (data) => this.todasPropiedades.set(this.appService.extractItems(data)),
       error: (err) => console.error('Error al cargar propiedades', err)
     });
   }
 
-  cargarPaginaHero(pagina: number) {
-    this.heroPaginaActual.set(pagina);
-  }
+  trackBySlug(_: number, p: PropiedadAgrupada) { return p.slug; }
 
   buscar(tipoPropiedad: string, tipoListado: string, departamento: string) {
-    this.heroPaginaActual.set(1);
-    this.filtros.set({ tipoPropiedad, tipoListado, departamento });
+    const queryParams: Record<string, string> = {};
+    if (tipoPropiedad) queryParams['tipo'] = tipoPropiedad;
+    if (tipoListado) queryParams['listado'] = tipoListado;
+    if (departamento) queryParams['departamento'] = departamento;
+    this.router.navigate(['/propiedades'], { queryParams });
   }
 
-  abrirModal(prop: PropiedadAgrupada) {
-    this.propiedadModal.set(prop);
-    this.modalAbierto.set(true);
-  }
-
-  cerrarModal() {
-    this.modalAbierto.set(false);
-    this.propiedadModal.set(null);
-  }
-
-  abrirLightbox(foto: string) {
-    this.fotoLightbox.set(foto);
-  }
-
-  cerrarLightbox() {
-    this.fotoLightbox.set(null);
-  }
-
-  private agruparPropiedades(items: PropiedadDetalle[]): PropiedadAgrupada[] {
-    const grupos = new Map<string, PropiedadAgrupada>();
-    for (const item of items) {
-      const key = `${item.titulo}||${item.descripcion}`;
-      if (grupos.has(key)) {
-        grupos.get(key)!.fotos.push(item.foto);
-      } else {
-        grupos.set(key, {
-          titulo: item.titulo,
-          descripcion: item.descripcion,
-          precio: item.precio,
-          fotos: [item.foto],
-          fotoPortada: item.foto,
-          descripcionTipoPropiedad: item.descripcionTipoPropiedad,
-          descripcionTipoListado: item.descripcionTipoListado,
-          descripcionDepartamento: item.descripcionDepartamento,
-          descripcionPromocion: item.descripcionPromocion,
-          activo: item.activo,
-        });
-      }
-    }
-    return Array.from(grupos.values());
-  }
-
-  private cargarTodasHeroPropiedades() {
-    this.appService.listarPropiedadDetalle(1, 1000).subscribe({
-      next: (data) => this.todasHeroPropiedades.set(data.items),
-      error: (err) => console.error('Error al cargar propiedades hero', err)
-    });
+  private mapearPropiedad(item: PropiedadDetalle): PropiedadAgrupada {
+    const fotos = item.fotos
+      ?.filter(f => f.activo)
+      .sort((a, b) => (a.orden ?? 9999) - (b.orden ?? 9999))
+      .map(f => f.foto)
+      .filter(Boolean) ?? [];
+    return {
+      propiedadListadoId: item.propiedadListadoId,
+      slug: this.appService.slugify(item.titulo),
+      titulo: item.titulo,
+      descripcion: item.descripcion,
+      descripcionFinal: item.descripcionFinal,
+      precio: item.precio,
+      fotos,
+      fotoPortada: fotos[0] ?? '',
+      descripcionTipoPropiedad: item.descripcionTipoPropiedad,
+      descripcionTipoListado: item.descripcionTipoListado,
+      descripcionDepartamento: item.descripcionDepartamento,
+      descripcionPromocion: item.descripcionPromocion,
+      activo: item.activo,
+      areaTerreno: item.areaTerreno,
+      ubicacion: item.ubicacion,
+    };
   }
 }
