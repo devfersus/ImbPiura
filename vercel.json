@@ -1,4 +1,6 @@
 {
+  "buildCommand": "ng build",
+  "outputDirectory": "dist/PryImb/browser",
   "rewrites": [
     {
       "source": "/api/:path*",
