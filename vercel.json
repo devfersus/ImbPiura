@@ -3,6 +3,10 @@
     {
       "source": "/api/:path*",
       "destination": "http://fersus99-001-site1.ntempurl.com/api/:path*"
+    },
+    {
+      "source": "/((?!api/).*)",
+      "destination": "/index.html"
     }
   ]
 }
