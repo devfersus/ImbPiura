@@ -47,7 +47,7 @@
 
 nav {
   display: flex;
-  gap: 10px;
+  gap: 25px;
   flex-wrap: nowrap;
   align-items: center;
 }
@@ -55,8 +55,8 @@ nav {
 nav a {
   text-decoration: none;
   color: black;
-  font-weight: 900;
-  font-size: 1rem;
+  font-weight: 700;
+  font-size: 1.15rem;
   transition: opacity 0.3s;
   text-transform: uppercase;
   letter-spacing: 0.5px;
@@ -309,7 +309,7 @@ nav a.active {
   background: #8C8C8C;
   color: white;
   border: none;
-  padding: 10px 30px;
+  padding: 2.5px 40px;
   font-weight: bold;
   cursor: pointer;
   font-size: clamp(0.8rem, 2vw, 0.9rem);

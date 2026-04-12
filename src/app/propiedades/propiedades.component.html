@@ -76,9 +76,9 @@
             </div>
             <div class="prop-info">
               <h3>{{ prop.titulo }}</h3>
-              <span class="sub">{{ prop.descripcion }}</span>
-              <p class="dep-label" *ngIf="prop.descripcionDepartamento">📍 {{ prop.descripcionDepartamento }}</p>
-              <p class="price">US$ {{ prop.precio | number }}</p>
+              <!-- <span class="sub">{{ prop.descripcion }}</span>
+              <p class="dep-label" *ngIf="prop.descripcionDepartamento">📍 {{ prop.descripcionDepartamento }}</p> -->
+              <!-- <p class="price">US$ {{ prop.precio | number }}</p> -->
               <a class="btn-ver-mas" [routerLink]="['/propiedad', prop.slug]">VER MÁS</a>
             </div>
           </div>
@@ -114,6 +114,9 @@
           </a>
           <a href="https://www.instagram.com/lotengo.inmobiliaria/" target="_blank" rel="noopener">
             <img src="iconos/instagram.png" alt="Instagram" loading="lazy">
+          </a>
+          <a href="https://wa.me/51943449197?text=Hola%2C%20Que%20tal%3F%20Quiero%20asesoria%20personalizada." target="_blank" rel="noopener">
+            <img src="iconos/whatsapp.svg" alt="WhatsApp" loading="lazy">
           </a>
         </div>
         <div class="contact-info">

@@ -60,6 +60,12 @@ export class DetalleComponent implements OnInit {
     this.lightboxFoto.set(null);
   }
 
+  get whatsappUrl(): string {
+    const url = typeof window !== 'undefined' ? window.location.href : '';
+    const mensaje = `Hola, quiero asesoría personalizada sobre esta propiedad: ${url}`;
+    return `https://wa.me/51943449197?text=${encodeURIComponent(mensaje)}`;
+  }
+
   private mapearPropiedad(item: PropiedadDetalle): PropiedadAgrupada {
     const fotos = item.fotos
       ?.filter(f => f.activo)

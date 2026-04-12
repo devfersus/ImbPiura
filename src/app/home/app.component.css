@@ -51,16 +51,16 @@ img {
 
 nav {
   display: flex;
-  gap: 10px;
+  gap: 25px;
   flex-wrap: nowrap;
   align-items: center;
 }
 
-nav a { 
-  text-decoration: none; 
-  color: black; 
-  font-weight: 900;
-  font-size: 1rem; 
+nav a {
+  text-decoration: none;
+  color: black;
+  font-weight: 700;
+  font-size: 1.15rem;
   transition: opacity 0.3s;
   font-family: 'Montserrat', sans-serif;
   text-transform: uppercase;
@@ -93,20 +93,20 @@ nav a:hover {
   will-change: transform;
 }
 
-.search-section { 
-  padding: 100px 20px 50px; 
+.search-section {
+  padding: 130px 20px 50px;
   width: 100%;
   position: relative;
   background: white;
 }
 
-.floating-badge { 
-  position: absolute; 
-  top: -100px; 
-  left: 50%; 
-  transform: translateX(-50%); 
-  width: 250px;
-  height: 200px;
+.floating-badge {
+  position: absolute;
+  top: -130px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 320px;
+  height: 260px;
   z-index: 10; 
   border-radius: 10px;
   padding: 20px;
@@ -638,47 +638,52 @@ nav a:hover {
 
 .cta-content {
   background: transparent;
-  padding: 60px 80px;
+  padding: 60px 50px;
   display: flex;
   flex-direction: column;
-  gap: 40px;
-  max-width: 600px;
+  gap: 24px;
+  max-width: 480px;
   margin-left: 5%;
 }
 
 .cta-logo img {
-  width: 180px;
+  width: 160px;
   height: auto;
   display: block;
-  filter: drop-shadow(2px 2px 4px rgba(0, 0, 0, 0.3));
 }
 
 .cta-text h2 {
-  font-size: clamp(2rem, 5vw, 3rem);
+  font-size: clamp(2rem, 4.5vw, 2.8rem);
   font-weight: 900;
-  line-height: 1.1;
+  line-height: 1.15;
   margin: 0;
   color: black;
-  text-shadow: 2px 2px 4px rgba(255, 255, 255, 0.8);
+  text-shadow: none;
 }
 
 .cta-text .highlight {
-  color: var(--yellow);
-  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+  background: var(--yellow);
+  color: black;
+  text-shadow: none;
+  padding: 2px 6px;
+  display: inline;
+  box-decoration-break: clone;
+  -webkit-box-decoration-break: clone;
 }
 
 .btn-cta {
   background: var(--dark);
   color: white;
   border: none;
-  padding: 18px 40px;
-  font-weight: bold;
-  font-size: 1rem;
+  padding: 16px 36px;
+  font-weight: 700;
+  font-size: 0.95rem;
+  letter-spacing: 1px;
   cursor: pointer;
   align-self: flex-start;
   transition: background 0.3s;
-  margin-top: 20px;
-  box-shadow: 2px 2px 8px rgba(0, 0, 0, 0.3);
+  text-transform: uppercase;
+  margin-top: 16px;
 }
 
 .btn-cta:hover {
@@ -754,6 +759,8 @@ nav a:hover {
   object-fit: contain;
 }
 
+
+
 .contact-info {
   display: flex;
   flex-direction: column;
@@ -816,14 +823,14 @@ nav a:hover {
   }
 
   .floating-badge {
-    width: 150px;
-    height: 150px;
-    top: -75px;
+    width: 190px;
+    height: 190px;
+    top: -95px;
     padding: 15px;
   }
 
   .search-section {
-    padding: 85px 20px 50px;
+    padding: 105px 20px 50px;
   }
 }
 
@@ -847,14 +854,14 @@ nav a:hover {
   }
 
   .floating-badge {
-    width: 120px;
-    height: 120px;
-    top: -60px;
+    width: 155px;
+    height: 155px;
+    top: -78px;
     padding: 12px;
   }
 
   .search-section {
-    padding: 70px 15px 40px;
+    padding: 88px 15px 40px;
   }
 
   .dark-search-bar {
@@ -997,9 +1004,9 @@ nav a:hover {
   }
 
   .floating-badge {
-    width: 100px;
-    height: 100px;
-    top: -50px;
+    width: 130px;
+    height: 130px;
+    top: -65px;
   }
 
   .contact-strip {

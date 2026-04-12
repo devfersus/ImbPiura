@@ -34,9 +34,6 @@
         <span>{{ propiedad()?.titulo }}</span>
       </div>
       <div class="titulo-wrap">
-        <div class="promo-badge" *ngIf="propiedad()?.descripcionPromocion">
-          {{ propiedad()?.descripcionPromocion }}
-        </div>
         <h1 class="prop-titulo">{{ propiedad()?.titulo }}</h1>
       </div>
     </div>
@@ -46,10 +43,12 @@
 
       <!-- Imagen principal con flechas -->
       <div class="foto-principal" (click)="abrirLightbox(fotoActualUrl())">
-        <button class="flecha flecha-izq" (click)="anteriorFoto(); $event.stopPropagation()" *ngIf="totalFotos() > 1">&#8249;</button>
-        <img [src]="fotoActualUrl()" [alt]="propiedad()?.titulo" loading="eager">
-        <button class="flecha flecha-der" (click)="siguienteFoto(); $event.stopPropagation()" *ngIf="totalFotos() > 1">&#8250;</button>
-        <span class="foto-contador" *ngIf="totalFotos() > 1">{{ fotoActual() + 1 }} / {{ totalFotos() }}</span>
+        <div class="foto-frame">
+          <button class="flecha flecha-izq" (click)="anteriorFoto(); $event.stopPropagation()" *ngIf="totalFotos() > 1">&#8249;</button>
+          <img [src]="fotoActualUrl()" [alt]="propiedad()?.titulo" loading="eager">
+          <button class="flecha flecha-der" (click)="siguienteFoto(); $event.stopPropagation()" *ngIf="totalFotos() > 1">&#8250;</button>
+          <span class="foto-contador" *ngIf="totalFotos() > 1">{{ fotoActual() + 1 }} / {{ totalFotos() }}</span>
+        </div>
       </div>
 
       <!-- Lista vertical de miniaturas -->
@@ -68,9 +67,15 @@
     <!-- Detalles + Descripción -->
     <div class="detalle-body">
 
+      <!-- CTA WhatsApp -->
+      <a [href]="whatsappUrl" target="_blank" rel="noopener" class="whatsapp-cta">
+        <img src="iconos/whatsapp.svg" alt="WhatsApp" class="whatsapp-cta-icon">
+        <span class="whatsapp-cta-texto">Quiero asesoría personalizada</span>
+      </a>
+
       <div class="detalles-row">
         <div class="detalle-item">
-          <span class="det-icon">🏷</span>
+          <span class="det-icon">$</span>
           <div class="det-texto">
             <span class="det-label">Precio</span>
             <span class="det-valor">US$ {{ propiedad()?.precio | number }}</span>
@@ -142,6 +147,7 @@
         <div class="social-icons">
           <a href="https://www.facebook.com/lotengoinmobiliaria?locale=es_LA" target="_blank" rel="noopener"><img src="iconos/facebook.png" alt="Facebook" loading="lazy"></a>
           <a href="https://www.instagram.com/lotengo.inmobiliaria/" target="_blank" rel="noopener"><img src="iconos/instagram.png" alt="Instagram" loading="lazy"></a>
+          <a href="https://wa.me/51943449197?text=Hola%2C%20Que%20tal%3F%20Quiero%20asesoria%20personalizada." target="_blank" rel="noopener"><img src="iconos/whatsapp.svg" alt="WhatsApp" loading="lazy"></a>
         </div>
         <div class="contact-info">
           <p class="phone">943 449 197</p>
