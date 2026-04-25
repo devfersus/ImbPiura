@@ -61,7 +61,7 @@ export class DetalleComponent implements OnInit {
   }
 
   get whatsappUrl(): string {
-    const url = typeof window !== 'undefined' ? window.location.href : '';
+    const url = typeof window !== 'undefined' ? window.location.href : 'https://www.lotengoinmobiliaria.com';
     const mensaje = `Hola, quiero asesoría personalizada sobre esta propiedad: ${url}`;
     return `https://wa.me/51943449197?text=${encodeURIComponent(mensaje)}`;
   }
