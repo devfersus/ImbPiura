@@ -22,7 +22,7 @@ export class AppService {
   }
 
   extractItems(data: any): PropiedadDetalle[] {
-    return data.items ?? [];
+    return (data.items ?? []).filter((p: PropiedadDetalle) => p.activo);
   }
 
   slugify(text: string): string {

@@ -199,6 +199,7 @@ nav a.active {
   display: flex;
   flex-direction: column;
   width: 100%;
+  position: relative;
 }
 
 .card-tag {
@@ -265,13 +266,24 @@ nav a.active {
 }
 
 .badge-listado {
+  position: absolute;
+  bottom:15px;
+  right: 0;
   background: var(--dark);
   color: white;
+  font-size: 0.7rem;
+  font-weight: 900;
+  padding: 5px 10px;
+  letter-spacing: 0.5px;
 }
 
 .prop-info {
   padding: 0 20px 20px;
   text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
 }
 
 .prop-info h3 {

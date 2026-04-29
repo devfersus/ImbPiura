@@ -42,7 +42,7 @@ export class HomeComponent implements OnInit {
 
   propiedadesPromo = computed(() =>
     this.todasPropiedades()
-      .filter(p => !!p.descripcionPromocion)
+      .filter(p => p.activo && !!p.descripcionPromocion)
       .map(p => this.mapearPropiedad(p))
   );
 

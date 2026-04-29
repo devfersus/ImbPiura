@@ -29,7 +29,7 @@
     </select>
 
     <select #sListado [value]="filtroListado()">
-      <option value="">Tipo de Listado</option>
+      <option value="">Tipo de Operación</option>
       <option *ngFor="let l of tiposListado()" [value]="l">{{ l }}</option>
     </select>
 
@@ -76,12 +76,11 @@
             </div>
             <div class="prop-info">
               <h3>{{ prop.titulo }}</h3>
-              <!-- <span class="sub">{{ prop.descripcion }}</span>
-              <p class="dep-label" *ngIf="prop.descripcionDepartamento">📍 {{ prop.descripcionDepartamento }}</p> -->
-              <!-- <p class="price">US$ {{ prop.precio | number }}</p> -->
+              <p class="price" *ngIf="prop.precio">US$ {{ prop.precio | number }}</p>
               <a class="btn-ver-mas" [routerLink]="['/propiedad', prop.slug]">VER MÁS</a>
             </div>
           </div>
+          <span class="badge-listado" *ngIf="prop.descripcionTipoListado">{{ prop.descripcionTipoListado | uppercase }}</span>
         </div>
       </div>
 

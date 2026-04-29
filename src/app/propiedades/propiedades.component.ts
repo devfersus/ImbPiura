@@ -56,7 +56,7 @@ export class PropiedadesComponent implements OnInit {
       const matchTipo = !tipo || p.descripcionTipoPropiedad === tipo;
       const matchListado = !listado || p.descripcionTipoListado === listado;
       const matchDep = !departamento || p.descripcionDepartamento === departamento;
-      return matchTipo && matchListado && matchDep;
+      return p.activo && matchTipo && matchListado && matchDep;
     });
   });
 
