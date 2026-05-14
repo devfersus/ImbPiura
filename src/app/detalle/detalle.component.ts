@@ -30,6 +30,7 @@ export class DetalleComponent implements OnInit {
       next: (data) => {
         const items = this.appService.extractItems(data);
         const item = items.find(p => this.appService.slugify(p.titulo) === slug) ?? null;
+        console.log('precio recibido:', item?.precio);
         this.propiedad.set(item ? this.mapearPropiedad(item) : null);
         this.cargando.set(false);
       },
@@ -60,6 +61,12 @@ export class DetalleComponent implements OnInit {
     this.lightboxFoto.set(null);
   }
 
+  get monedaIcono(): string {
+    const moneda = this.propiedad()?.tipoMoneda ?? 'S/.';
+    const iconos: Record<string, string> = { 'S/.': '🪙', '$': '💵', '€': '💶', '£': '💷' };
+    return iconos[moneda] ?? '🪙';
+  }
+
   get whatsappUrl(): string {
     const url = typeof window !== 'undefined' ? window.location.href : 'https://www.lotengoinmobiliaria.com';
     const mensaje = `Hola, quiero asesoría personalizada sobre esta propiedad: ${url}`;
@@ -79,6 +86,7 @@ export class DetalleComponent implements OnInit {
       descripcion: item.descripcion,
       descripcionFinal: item.descripcionFinal,
       precio: item.precio,
+      tipoMoneda: item.tipoMoneda ?? 'S/.',
       fotos,
       fotoPortada: fotos[0] ?? '',
       descripcionTipoPropiedad: item.descripcionTipoPropiedad,

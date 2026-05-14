@@ -15,6 +15,7 @@ export interface PropiedadDetalle {
   descripcion: string;
   descripcionFinal: string | null;
   precio: number;
+  tipoMoneda: string | null;
   fotos: PropiedadFoto[];
   contadorClicks: number;
   codigoPromocionId: number;
@@ -34,6 +35,7 @@ export interface PropiedadAgrupada {
   descripcion: string;
   descripcionFinal: string | null;
   precio: number;
+  tipoMoneda: string | null;
   fotos: string[];
   fotoPortada: string;
   descripcionTipoPropiedad: string | null;

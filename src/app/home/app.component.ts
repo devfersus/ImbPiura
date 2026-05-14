@@ -78,6 +78,7 @@ export class HomeComponent implements OnInit {
       descripcion: item.descripcion,
       descripcionFinal: item.descripcionFinal,
       precio: item.precio,
+      tipoMoneda: item.tipoMoneda ?? 'S/.',
       fotos,
       fotoPortada: fotos[0] ?? '',
       descripcionTipoPropiedad: item.descripcionTipoPropiedad,

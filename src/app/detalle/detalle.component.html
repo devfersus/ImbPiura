@@ -75,10 +75,10 @@
 
       <div class="detalles-row">
         <div class="detalle-item">
-          <span class="det-icon">$</span>
+          <span class="det-icon">{{ monedaIcono }}</span>
           <div class="det-texto">
             <span class="det-label">Precio</span>
-            <span class="det-valor">US$ {{ propiedad()?.precio | number }}</span>
+            <span class="det-valor">{{ propiedad()?.tipoMoneda ?? 'S/.' }} {{ propiedad()?.precio }}</span>
           </div>
         </div>
         <div class="detalle-item" *ngIf="propiedad()?.descripcionTipoPropiedad">
