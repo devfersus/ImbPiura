@@ -278,7 +278,7 @@ nav a.active {
 }
 
 .prop-info {
-  padding: 0 20px 20px;
+  padding: 0 20px 48px;
   text-align: center;
   display: flex;
   flex-direction: column;
@@ -309,6 +309,20 @@ nav a.active {
   font-weight: 600;
   color: #444;
   margin-bottom: 8px;
+}
+
+.prop-descripcion {
+  font-size: clamp(0.72rem, 2vw, 0.85rem);
+  color: #666;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  margin: 0;
 }
 
 .price {

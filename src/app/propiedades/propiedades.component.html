@@ -76,6 +76,7 @@
             </div>
             <div class="prop-info">
               <h3>{{ prop.titulo }}</h3>
+              <p class="prop-descripcion" *ngIf="prop.descripcion">{{ prop.descripcion }}</p>
               <p class="price" *ngIf="prop.precio">{{ prop.tipoMoneda ?? 'S/.' }} {{ prop.precio }}</p>
               <a class="btn-ver-mas" [routerLink]="['/propiedad', prop.slug]">VER MÁS</a>
             </div>

@@ -67,7 +67,7 @@
           <div class="prop-info">
             <h3>{{prop.titulo}}</h3>
             <span class="sub">{{prop.descripcion}}</span>
-            <p class="price">US$ {{prop.precio | number}}</p>
+            <p class="price">{{ prop.tipoMoneda ?? 'S/.' }} {{ prop.precio }}</p>
             <a class="btn-ver-mas" [routerLink]="['/propiedad', prop.slug]">VER MÁS</a>
           </div>
         </div>
