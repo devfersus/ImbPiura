@@ -29,7 +29,7 @@ export class AppService {
     if (!this.cachePaginadas.has(key)) {
       const request$ = this.http.get<any>(
         `${this.apiUrl}/propiedaddetalle/obtenerpropiedadesactivasparaweb`,
-        { params: { numeroPagina, tamanioPagina } }
+        { params: { NumeroPagina: numeroPagina, TamanioPagina: tamanioPagina } }
       ).pipe(shareReplay(1));
       this.cachePaginadas.set(key, request$);
     }
