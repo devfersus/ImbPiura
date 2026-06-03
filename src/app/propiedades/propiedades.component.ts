@@ -17,16 +17,24 @@ export class PropiedadesComponent implements OnInit {
   private router = inject(Router);
   private appService = inject(AppService);
 
-  private todasPropiedades = signal<PropiedadDetalle[]>([]);
   cargando = signal(true);
 
   filtroTipo = signal('');
   filtroListado = signal('');
   filtroDepartamento = signal('');
 
+  propiedadesPagina = signal<PropiedadAgrupada[]>([]);
+  paginaActual = signal(1);
+  totalPaginas = signal(1);
+  totalResultados = signal(0);
+
+  paginas = computed(() =>
+    Array.from({ length: this.totalPaginas() }, (_, i) => i + 1)
+  );
+
   tiposPropiedad = computed(() =>
     [...new Set(
-      this.todasPropiedades()
+      this.propiedadesPagina()
         .map(p => p.descripcionTipoPropiedad)
         .filter((v): v is string => !!v)
     )]
@@ -34,7 +42,7 @@ export class PropiedadesComponent implements OnInit {
 
   tiposListado = computed(() =>
     [...new Set(
-      this.todasPropiedades()
+      this.propiedadesPagina()
         .map(p => p.descripcionTipoListado)
         .filter((v): v is string => !!v)
     )]
@@ -42,63 +50,18 @@ export class PropiedadesComponent implements OnInit {
 
   departamentos = computed(() =>
     [...new Set(
-      this.todasPropiedades()
+      this.propiedadesPagina()
         .map(p => p.descripcionDepartamento)
         .filter((v): v is string => !!v)
     )]
   );
-
-  private propiedadesFiltradas = computed(() => {
-    const tipo = this.filtroTipo();
-    const listado = this.filtroListado();
-    const departamento = this.filtroDepartamento();
-    return this.todasPropiedades().filter(p => {
-      const matchTipo = !tipo || p.descripcionTipoPropiedad === tipo;
-      const matchListado = !listado || p.descripcionTipoListado === listado;
-      const matchDep = !departamento || p.descripcionDepartamento === departamento;
-      return p.activo && matchTipo && matchListado && matchDep;
-    });
-  });
-
-  private propiedadesAgrupadas = computed(() =>
-    this.propiedadesFiltradas().map(p => this.mapearPropiedad(p))
-  );
-
-  readonly ITEMS_POR_PAGINA = 9;
-  paginaActual = signal(1);
-
-  totalPaginas = computed(() =>
-    Math.max(1, Math.ceil(this.propiedadesAgrupadas().length / this.ITEMS_POR_PAGINA))
-  );
-
-  paginas = computed(() =>
-    Array.from({ length: this.totalPaginas() }, (_, i) => i + 1)
-  );
-
-  propiedadesPagina = computed(() => {
-    const inicio = (this.paginaActual() - 1) * this.ITEMS_POR_PAGINA;
-    return this.propiedadesAgrupadas().slice(inicio, inicio + this.ITEMS_POR_PAGINA);
-  });
-
-  totalResultados = computed(() => this.propiedadesAgrupadas().length);
 
   ngOnInit() {
     this.route.queryParams.subscribe(params => {
       this.filtroTipo.set(params['tipo'] || '');
       this.filtroListado.set(params['listado'] || '');
       this.filtroDepartamento.set(params['departamento'] || '');
-      this.paginaActual.set(1);
-    });
-
-    this.appService.listarPropiedadDetalle(1, 1000).subscribe({
-      next: (data) => {
-        this.todasPropiedades.set(this.appService.extractItems(data));
-        this.cargando.set(false);
-      },
-      error: (err) => {
-        console.error('Error al cargar propiedades', err);
-        this.cargando.set(false);
-      }
+      this.cargarPagina(1);
     });
   }
 
@@ -111,8 +74,25 @@ export class PropiedadesComponent implements OnInit {
   }
 
   irAPagina(pagina: number) {
-    this.paginaActual.set(pagina);
+    this.cargarPagina(pagina);
     window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+
+  private cargarPagina(pagina: number) {
+    this.cargando.set(true);
+    this.appService.obtenerPropiedadesActivasPaginadas(pagina).subscribe({
+      next: (data) => {
+        this.propiedadesPagina.set(data.items.map((p: PropiedadDetalle) => this.mapearPropiedad(p)));
+        this.totalPaginas.set(data.totalPaginas);
+        this.totalResultados.set(data.totalRegistros);
+        this.paginaActual.set(data.numeroPagina);
+        this.cargando.set(false);
+      },
+      error: (err) => {
+        console.error('Error al cargar propiedades', err);
+        this.cargando.set(false);
+      }
+    });
   }
 
   private mapearPropiedad(item: PropiedadDetalle): PropiedadAgrupada {

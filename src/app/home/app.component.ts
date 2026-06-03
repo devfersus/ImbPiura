@@ -49,8 +49,8 @@ export class HomeComponent implements OnInit {
   constructor(private appService: AppService, private router: Router) {}
 
   ngOnInit() {
-    this.appService.listarPropiedadDetalle(1, 1000).subscribe({
-      next: (data) => this.todasPropiedades.set(this.appService.extractItems(data)),
+    this.appService.obtenerPropiedadesConPromocion().subscribe({
+      next: (data) => this.todasPropiedades.set(data),
       error: (err) => console.error('Error al cargar propiedades', err)
     });
   }

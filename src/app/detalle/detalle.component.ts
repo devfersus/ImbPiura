@@ -26,15 +26,14 @@ export class DetalleComponent implements OnInit {
 
   ngOnInit() {
     const slug = this.route.snapshot.paramMap.get('slug') ?? '';
-    this.appService.listarPropiedadDetalle(1, 1000).subscribe({
-      next: (data) => {
-        const items = this.appService.extractItems(data);
-        const item = items.find(p => this.appService.slugify(p.titulo) === slug) ?? null;
+    this.appService.obtenerPropiedadesActivasPaginadas(1, 1000).subscribe({
+      next: (data: { items: PropiedadDetalle[] }) => {
+        const item = data.items.find((p: PropiedadDetalle) => this.appService.slugify(p.titulo) === slug) ?? null;
         console.log('precio recibido:', item?.precio);
         this.propiedad.set(item ? this.mapearPropiedad(item) : null);
         this.cargando.set(false);
       },
-      error: (err) => {
+      error: (err: unknown) => {
         console.error('Error al cargar detalle', err);
         this.cargando.set(false);
       }
