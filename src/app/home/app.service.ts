@@ -1,29 +1,39 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
+import { shareReplay } from 'rxjs/operators';
 import { PropiedadDetalle } from './models/property.component';
 import { environment } from '../../environments/environment';
 
 @Injectable({ providedIn: 'root' })
 export class AppService {
   private apiUrl = environment.apiUrl;
+  private cachePromocion$: Observable<PropiedadDetalle[]> | null = null;
+  private cachePaginadas = new Map<string, Observable<any>>();
 
   constructor(private http: HttpClient) {}
 
-  // POST — propiedades con promoción (para el inicio)
+  // GET — propiedades con promoción (para el inicio)
   obtenerPropiedadesConPromocion(): Observable<PropiedadDetalle[]> {
-    return this.http.post<PropiedadDetalle[]>(
-      `${this.apiUrl}/propiedaddetalle/obtenerpropiedadesconpromocionparaweb`,
-      {}
-    );
+    if (!this.cachePromocion$) {
+      this.cachePromocion$ = this.http.get<PropiedadDetalle[]>(
+        `${this.apiUrl}/propiedaddetalle/obtenerpropiedadesconpromocionparaweb`
+      ).pipe(shareReplay(1));
+    }
+    return this.cachePromocion$;
   }
 
-  // POST — propiedades activas paginadas (para el apartado propiedades)
+  // GET — propiedades activas paginadas (para el apartado propiedades)
   obtenerPropiedadesActivasPaginadas(numeroPagina: number, tamanioPagina: number = 9): Observable<any> {
-    return this.http.post<any>(
-      `${this.apiUrl}/propiedaddetalle/obtenerpropiedadesactivasparaweb`,
-      { numeroPagina, tamanioPagina }
-    );
+    const key = `${numeroPagina}-${tamanioPagina}`;
+    if (!this.cachePaginadas.has(key)) {
+      const request$ = this.http.get<any>(
+        `${this.apiUrl}/propiedaddetalle/obtenerpropiedadesactivasparaweb`,
+        { params: { numeroPagina, tamanioPagina } }
+      ).pipe(shareReplay(1));
+      this.cachePaginadas.set(key, request$);
+    }
+    return this.cachePaginadas.get(key)!;
   }
 
   slugify(text: string): string {
