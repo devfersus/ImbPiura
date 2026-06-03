@@ -21,7 +21,7 @@ export class PropiedadesComponent implements OnInit {
 
   filtroTipo = signal('');
   filtroListado = signal('');
-  filtroDepartamento = signal('');
+  ordenPrecio = signal<'asc' | 'desc' | ''>('');
 
   propiedadesPagina = signal<PropiedadAgrupada[]>([]);
   paginaActual = signal(1);
@@ -48,28 +48,28 @@ export class PropiedadesComponent implements OnInit {
     )]
   );
 
-  departamentos = computed(() =>
-    [...new Set(
-      this.propiedadesPagina()
-        .map(p => p.descripcionDepartamento)
-        .filter((v): v is string => !!v)
-    )]
-  );
+  propiedadesOrdenadas = computed(() => {
+    const lista = this.propiedadesPagina();
+    const orden = this.ordenPrecio();
+    if (!orden) return lista;
+    return [...lista].sort((a, b) =>
+      orden === 'asc' ? (a.precio ?? 0) - (b.precio ?? 0) : (b.precio ?? 0) - (a.precio ?? 0)
+    );
+  });
 
   ngOnInit() {
     this.route.queryParams.subscribe(params => {
       this.filtroTipo.set(params['tipo'] || '');
       this.filtroListado.set(params['listado'] || '');
-      this.filtroDepartamento.set(params['departamento'] || '');
       this.cargarPagina(1);
     });
   }
 
-  filtrar(tipo: string, listado: string, departamento: string) {
+  filtrar(tipo: string, listado: string, orden: string) {
     const queryParams: Record<string, string> = {};
     if (tipo) queryParams['tipo'] = tipo;
     if (listado) queryParams['listado'] = listado;
-    if (departamento) queryParams['departamento'] = departamento;
+    this.ordenPrecio.set(orden as 'asc' | 'desc' | '');
     this.router.navigate(['/propiedades'], { queryParams });
   }
 

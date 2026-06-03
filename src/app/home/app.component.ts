@@ -57,11 +57,10 @@ export class HomeComponent implements OnInit {
 
   trackBySlug(_: number, p: PropiedadAgrupada) { return p.slug; }
 
-  buscar(tipoPropiedad: string, tipoListado: string, departamento: string) {
+  buscar(tipoPropiedad: string, tipoListado: string) {
     const queryParams: Record<string, string> = {};
     if (tipoPropiedad) queryParams['tipo'] = tipoPropiedad;
     if (tipoListado) queryParams['listado'] = tipoListado;
-    if (departamento) queryParams['departamento'] = departamento;
     this.router.navigate(['/propiedades'], { queryParams });
   }
 

@@ -582,11 +582,26 @@ nav a:hover {
   /* Galería: imagen arriba, miniaturas horizontales abajo */
   .galeria-wrap {
     grid-template-columns: 1fr;
-    grid-template-rows: 240px 80px;
+    grid-template-rows: auto 80px;
     height: auto;
   }
 
-  .foto-principal { height: 240px; }
+  .foto-principal {
+    height: auto;
+    padding-right: 0;
+    justify-content: center;
+  }
+
+  .foto-frame {
+    width: 100%;
+    height: auto;
+  }
+
+  .foto-frame img {
+    width: 100%;
+    height: auto;
+    object-fit: unset;
+  }
 
   .lista-fotos {
     flex-direction: row;

@@ -16,8 +16,7 @@
     <h1>
       <span *ngIf="filtroTipo()">{{ filtroTipo() }}</span>
       <span *ngIf="filtroListado()"> — {{ filtroListado() }}</span>
-      <span *ngIf="filtroDepartamento()"> en {{ filtroDepartamento() }}</span>
-      <span *ngIf="!filtroTipo() && !filtroListado() && !filtroDepartamento()">Todas las Propiedades</span>
+      <span *ngIf="!filtroTipo() && !filtroListado()">Todas las Propiedades</span>
     </h1>
   </div>
 
@@ -33,16 +32,17 @@
       <option *ngFor="let l of tiposListado()" [value]="l">{{ l }}</option>
     </select>
 
-    <select #sDonde [value]="filtroDepartamento()">
-      <option value="">En donde</option>
-      <option *ngFor="let dep of departamentos()" [value]="dep">{{ dep }}</option>
+    <select #sOrden [value]="ordenPrecio()">
+      <option value="">Ordenar por precio</option>
+      <option value="desc">Mayor a menor</option>
+      <option value="asc">Menor a mayor</option>
     </select>
 
-    <button class="btn-filtrar" (click)="filtrar(sTipo.value, sListado.value, sDonde.value)">
+    <button class="btn-filtrar" (click)="filtrar(sTipo.value, sListado.value, sOrden.value)">
       BUSCAR
     </button>
 
-    <a routerLink="/" class="btn-limpiar" *ngIf="filtroTipo() || filtroListado() || filtroDepartamento()">
+    <a routerLink="/propiedades" class="btn-limpiar" *ngIf="filtroTipo() || filtroListado() || ordenPrecio()">
       LIMPIAR FILTROS
     </a>
   </div>
@@ -68,7 +68,7 @@
       </div>
 
       <div class="prop-grid">
-        <div class="prop-card" *ngFor="let prop of propiedadesPagina()">
+        <div class="prop-card" *ngFor="let prop of propiedadesOrdenadas()">
           <div class="card-content">
             <div class="white-frame" [routerLink]="['/propiedad', prop.slug]" style="cursor:pointer">
               <img *ngIf="prop.fotoPortada" [src]="prop.fotoPortada" [alt]="prop.titulo" class="prop-image" loading="lazy">

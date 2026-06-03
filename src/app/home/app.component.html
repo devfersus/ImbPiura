@@ -31,14 +31,7 @@
           <option value="" disabled selected hidden>Tipo de Operación</option>
           <option *ngFor="let listado of tiposListado()" [value]="listado">{{listado}}</option>
         </select>
-        <div class="input-with-icon">
-          <select #selectDonde class="select-donde">
-            <option value="" disabled selected hidden>En donde</option>
-            <option *ngFor="let dep of departamentos()" [value]="dep">{{dep}}</option>
-          </select>
-          <span class="loc-icon">📍</span>
-          <span class="search-icon" (click)="buscar(selectTipo.value, selectListado.value, selectDonde.value)">🔍</span>
-        </div>
+        <span class="search-icon" (click)="buscar(selectTipo.value, selectListado.value)">🔍</span>
       </div>
 
       <p class="hero-footer-text">
