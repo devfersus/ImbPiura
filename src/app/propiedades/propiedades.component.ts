@@ -57,6 +57,15 @@ export class PropiedadesComponent implements OnInit {
     );
   });
 
+  propiedadesFiltradas = computed(() => {
+    let lista = this.propiedadesOrdenadas();
+    const tipo = this.filtroTipo();
+    const listado = this.filtroListado();
+    if (tipo) lista = lista.filter(p => p.descripcionTipoPropiedad === tipo);
+    if (listado) lista = lista.filter(p => p.descripcionTipoListado === listado);
+    return lista;
+  });
+
   ngOnInit() {
     this.route.queryParams.subscribe(params => {
       this.filtroTipo.set(params['tipo'] || '');
@@ -80,19 +89,37 @@ export class PropiedadesComponent implements OnInit {
 
   private cargarPagina(pagina: number) {
     this.cargando.set(true);
-    this.appService.obtenerPropiedadesActivasPaginadas(pagina).subscribe({
-      next: (data) => {
-        this.propiedadesPagina.set(data.items.map((p: PropiedadDetalle) => this.mapearPropiedad(p)));
-        this.totalPaginas.set(data.totalPaginas);
-        this.totalResultados.set(data.totalRegistros);
-        this.paginaActual.set(data.numeroPagina);
-        this.cargando.set(false);
-      },
-      error: (err) => {
-        console.error('Error al cargar propiedades', err);
-        this.cargando.set(false);
-      }
-    });
+    const tieneFiltros = !!(this.filtroTipo() || this.filtroListado());
+
+    if (tieneFiltros) {
+      this.appService.obtenerTodasLasPropiedades().subscribe({
+        next: (items: PropiedadDetalle[]) => {
+          this.propiedadesPagina.set(items.map(p => this.mapearPropiedad(p)));
+          this.totalPaginas.set(1);
+          this.totalResultados.set(items.length);
+          this.paginaActual.set(1);
+          this.cargando.set(false);
+        },
+        error: (err) => {
+          console.error('Error al cargar propiedades', err);
+          this.cargando.set(false);
+        }
+      });
+    } else {
+      this.appService.obtenerPropiedadesActivasPaginadas(pagina).subscribe({
+        next: (data) => {
+          this.propiedadesPagina.set(data.items.map((p: PropiedadDetalle) => this.mapearPropiedad(p)));
+          this.totalPaginas.set(data.totalPaginas);
+          this.totalResultados.set(data.totalRegistros);
+          this.paginaActual.set(data.numeroPagina);
+          this.cargando.set(false);
+        },
+        error: (err) => {
+          console.error('Error al cargar propiedades', err);
+          this.cargando.set(false);
+        }
+      });
+    }
   }
 
   private mapearPropiedad(item: PropiedadDetalle): PropiedadAgrupada {

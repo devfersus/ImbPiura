@@ -22,20 +22,20 @@
 
   <!-- Filtros -->
   <div class="filtros-bar">
-    <select #sTipo [value]="filtroTipo()">
-      <option value="">Tipo de Propiedad</option>
-      <option *ngFor="let tipo of tiposPropiedad()" [value]="tipo">{{ tipo }}</option>
+    <select #sTipo>
+      <option value="" [selected]="!filtroTipo()">Tipo de Propiedad</option>
+      <option *ngFor="let tipo of tiposPropiedad()" [value]="tipo" [selected]="tipo === filtroTipo()">{{ tipo }}</option>
     </select>
 
-    <select #sListado [value]="filtroListado()">
-      <option value="">Tipo de Operación</option>
-      <option *ngFor="let l of tiposListado()" [value]="l">{{ l }}</option>
+    <select #sListado>
+      <option value="" [selected]="!filtroListado()">Tipo de Operación</option>
+      <option *ngFor="let l of tiposListado()" [value]="l" [selected]="l === filtroListado()">{{ l }}</option>
     </select>
 
-    <select #sOrden [value]="ordenPrecio()">
-      <option value="">Ordenar por precio</option>
-      <option value="desc">Mayor a menor</option>
-      <option value="asc">Menor a mayor</option>
+    <select #sOrden>
+      <option value="" [selected]="!ordenPrecio()">Ordenar por precio</option>
+      <option value="desc" [selected]="ordenPrecio() === 'desc'">Mayor a menor</option>
+      <option value="asc" [selected]="ordenPrecio() === 'asc'">Menor a mayor</option>
     </select>
 
     <button class="btn-filtrar" (click)="filtrar(sTipo.value, sListado.value, sOrden.value)">
@@ -56,19 +56,19 @@
     </div>
 
     <!-- Sin resultados -->
-    <div class="sin-resultados" *ngIf="!cargando() && totalResultados() === 0">
+    <div class="sin-resultados" *ngIf="!cargando() && propiedadesFiltradas().length === 0">
       <p>No se encontraron propiedades con los filtros seleccionados.</p>
       <a routerLink="/propiedades" class="btn-filtrar">VER TODAS</a>
     </div>
 
     <!-- Grid de propiedades -->
-    <div class="props-grid" *ngIf="!cargando() && totalResultados() > 0">
+    <div class="props-grid" *ngIf="!cargando() && propiedadesFiltradas().length > 0">
       <div class="resultado-count">
-        {{ totalResultados() }} propiedad{{ totalResultados() !== 1 ? 'es' : '' }} encontrada{{ totalResultados() !== 1 ? 's' : '' }}
+        {{ propiedadesFiltradas().length }} propiedad{{ propiedadesFiltradas().length !== 1 ? 'es' : '' }} encontrada{{ propiedadesFiltradas().length !== 1 ? 's' : '' }}
       </div>
 
       <div class="prop-grid">
-        <div class="prop-card" *ngFor="let prop of propiedadesOrdenadas()">
+        <div class="prop-card" *ngFor="let prop of propiedadesFiltradas()">
           <div class="card-content">
             <div class="white-frame" [routerLink]="['/propiedad', prop.slug]" style="cursor:pointer">
               <img *ngIf="prop.fotoPortada" [src]="prop.fotoPortada" [alt]="prop.titulo" class="prop-image" loading="lazy">
@@ -86,7 +86,7 @@
       </div>
 
       <!-- Paginación -->
-      <div class="pagination" *ngIf="totalPaginas() > 1">
+      <div class="pagination" *ngIf="totalPaginas() > 1 && !filtroTipo() && !filtroListado()">
         <button class="page-btn" [disabled]="paginaActual() === 1" (click)="irAPagina(paginaActual() - 1)">&#8249;</button>
         <button
           class="page-btn"

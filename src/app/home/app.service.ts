@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { shareReplay } from 'rxjs/operators';
+import { map, shareReplay } from 'rxjs/operators';
 import { PropiedadDetalle } from './models/property.component';
 import { environment } from '../../environments/environment';
 
@@ -10,6 +10,7 @@ export class AppService {
   private apiUrl = environment.apiUrl;
   private cachePromocion$: Observable<PropiedadDetalle[]> | null = null;
   private cachePaginadas = new Map<string, Observable<any>>();
+  private cacheTodasPropiedades$: Observable<PropiedadDetalle[]> | null = null;
 
   constructor(private http: HttpClient) {}
 
@@ -34,6 +35,20 @@ export class AppService {
       this.cachePaginadas.set(key, request$);
     }
     return this.cachePaginadas.get(key)!;
+  }
+
+  // GET — todas las propiedades activas (para filtros globales)
+  obtenerTodasLasPropiedades(): Observable<PropiedadDetalle[]> {
+    if (!this.cacheTodasPropiedades$) {
+      this.cacheTodasPropiedades$ = this.http.get<any>(
+        `${this.apiUrl}/propiedaddetalle/obtenerpropiedadesactivasparaweb`,
+        { params: { NumeroPagina: 1, TamanioPagina: 9999 } }
+      ).pipe(
+        map((res: any) => res.items ?? []),
+        shareReplay(1)
+      );
+    }
+    return this.cacheTodasPropiedades$;
   }
 
   slugify(text: string): string {
